@@ -1,0 +1,368 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .map-description {
+        text-align: center;
+        font-size: 18px;
+        color: #555;
+        margin-bottom: 30px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.6;
+    }
+    
+    .mobile-projects-list {
+        display: none;
+        background: #fff;
+        border-radius: 10px;
+        padding: 25px;
+        margin-top: 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        max-height: 600px;
+        overflow-y: auto;
+    }
+    
+    .mobile-projects-list h3 {
+        color: #1a5276;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        font-size: 22px;
+        position: sticky;
+        top: 0;
+        background: white;
+        padding: 10px 0;
+        z-index: 1;
+    }
+    
+    .mobile-projects-list h3 i {
+        margin-right: 10px;
+    }
+    
+    .mobile-project-item {
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .mobile-project-item:last-child {
+        border-bottom: none;
+    }
+    
+    .mobile-project-item h4 {
+        color: #1a5276;
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+    
+    .mobile-project-item p {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+    
+    .mobile-project-item .location {
+        color: #888;
+        font-size: 13px;
+        font-style: italic;
+    }
+    
+    .project-count {
+        text-align: center;
+        font-size: 20px;
+        color: #1a5276;
+        font-weight: 600;
+        margin-top: 20px;
+        padding: 10px;
+        background: #f0f4f8;
+        border-radius: 8px;
+        max-width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    @media (max-width: 768px) {
+        .mobile-projects-list {
+            display: block;
+        }
+        #yandex-map {
+            height: 400px !important;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <!-- СЛАЙДЕР -->
+    <section class="slider-section">
+        <div class="slider-container" id="sliderContainer">
+            <!-- СЛАЙД 1 -->
+            <!-- ПУТЬ К ИЗОБРАЖЕНИЮ: static/img/slider/slide1.jpg -->
+            <div class="slider-slide active" style="background-image: url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                <div class="slider-content">
+                    <h2>Профессионализм и опыт</h2>
+                    <h3>Инженерные изыскания, геодезия, кадастровые работы</h3>
+                    <div class="years">29</div>
+                    <div class="years-label">лет успешной работы на рынке</div>
+                </div>
+            </div>
+            
+            <!-- СЛАЙД 2 -->
+            <!-- ПУТЬ К ИЗОБРАЖЕНИЮ: static/img/slider/slide2.jpg -->
+            <div class="slider-slide" style="background-image: url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                <div class="slider-content">
+                    <h2>Технический заказчик</h2>
+                    <h3>От идеи до воплощения - полный комплекс инженерных услуг</h3>
+                    <div class="years">1300+</div>
+                    <div class="years-label">реализованных проектов федерального масштаба</div>
+                </div>
+            </div>
+            
+            <!-- СЛАЙД 3 -->
+            <!-- ПУТЬ К ИЗОБРАЖЕНИЮ: static/img/slider/slide3.jpg -->
+            <div class="slider-slide" style="background-image: url('https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                <div class="slider-content">
+                    <h2>Строительный консалтинг</h2>
+                    <h3>Финансово-технический надзор на защите интересов Заказчика</h3>
+                    <div class="years">520</div>
+                    <div class="years-label">высококвалифицированных специалистов</div>
+                </div>
+            </div>
+            
+            <!-- СЛАЙД 4 -->
+            <!-- ПУТЬ К ИЗОБРАЖЕНИЮ: static/img/slider/slide4.jpg -->
+            <div class="slider-slide" style="background-image: url('https://images.unsplash.com/photo-1516937941344-00b4e0337589?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                <div class="slider-content">
+                    <h2>География проектов</h2>
+                    <h3>Работы по всей России и странам ближнего зарубежья</h3>
+                    <div class="years">{{ projects_count }}</div>
+                    <div class="years-label">ключевых объекта на интерактивной карте</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Стрелки навигации -->
+        <button class="slider-arrow prev" id="prevSlide">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="slider-arrow next" id="nextSlide">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        
+        <!-- Точки навигации -->
+        <div class="slider-nav" id="sliderNav">
+            <div class="slider-dot active" data-slide="0"></div>
+            <div class="slider-dot" data-slide="1"></div>
+            <div class="slider-dot" data-slide="2"></div>
+            <div class="slider-dot" data-slide="3"></div>
+        </div>
+    </section>
+
+    <!-- Главный баннер -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title">{{ page_title }}</h1>
+            <h4>Воплощаем уникальные проекты, развивая будущее страны</h4>
+            <a href="#about" class="btn">Узнать больше</a>
+        </div>
+    </section>
+
+    <!-- О компании -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="section-title">О компании</h2>
+            <div class="about-content">
+                <p><strong>ДОНГИС</strong> — одна из ведущих инженерных компаний, выполняющая работы по всей России и странам ближнего зарубежья. Разнообразие и широкая география проектов подтверждают уникальный опыт в каждой из экспертных областей и готовность решать поставленные задачи даже в непростых условиях.</p>
+                <p>Основными направлениями деятельности компании являются кадастровые и землеустроительные работы, полный комплекс инженерных изысканий, проектные и строительные работы. Гарантом профессионализма и надежности являются партнеры и постоянные клиенты на территории России и других стран.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Блок с цифрами -->
+    <section class="numbers" id="numbers">
+        <div class="container">
+            <h2 class="section-title">География проектов</h2>
+            <div class="numbers-grid">
+                <div class="number-card">
+                    <div class="number" data-count="29">0</div>
+                    <div class="number-label">лет успешной работы</div>
+                </div>
+                <div class="number-card">
+                    <div class="number" data-count="{{ projects_count }}">0</div>
+                    <div class="number-label">ключевых объектов на карте</div>
+                </div>
+                <div class="number-card">
+                    <div class="number" data-count="520">0</div>
+                    <div class="number-label">высококвалифицированных сотрудников</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Карта проектов -->
+    <section class="projects-map" id="projects-map">
+        <div class="container">
+            <h2 class="section-title">География наших проектов</h2>
+            <p class="map-description">На карте отмечены ключевые проекты, реализованные нашей компанией по всей России и странам ближнего зарубежья. Каждая метка содержит информацию о проекте, его местоположении и составе работ.</p>
+            
+            <div class="map-container">
+                <div id="yandex-map" style="width: 100%; height: 600px; border-radius: 10px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);"></div>
+            </div>
+            
+            <div class="project-count">Всего проектов на карте: <span id="total-projects">{{ projects_count }}</span></div>
+            
+            <!-- Список проектов для мобильных устройств -->
+            <div class="mobile-projects-list">
+                <h3><i class="fas fa-list"></i> Все проекты ({{ projects_count }}):</h3>
+                
+                <div class="mobile-project-item">
+                    <h4>1. Мурманский порт</h4>
+                    <p>Создание специализированного комплекса по перевалке бункерного топлива</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Мурманск, грузовой район № 2</p>
+                </div>
+                
+                <div class="mobile-project-item">
+                    <h4>2. Каток с искусственным льдом</h4>
+                    <p>Крытый каток в Ямало-Ненецком АО</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Салехард</p>
+                </div>
+                
+                <!-- Остальные проекты... -->
+                
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Загрузка Яндекс.Карт
+    function loadYandexMap() {
+        if (!document.getElementById('yandex-map')) return;
+        
+        const apiKey = '1ee09318-9b80-49ec-93d7-b1c2f8a004cc';
+        const script = document.createElement('script');
+        script.src = `https://api-maps.yandex.ru/2.1/?apikey=${apiKey}&lang=ru_RU`;
+        script.onload = initYandexMap;
+        document.head.appendChild(script);
+    }
+
+    // Инициализация карты
+    function initYandexMap() {
+        ymaps.ready(function() {
+            const map = new ymaps.Map('yandex-map', {
+                center: [55.76, 37.64],
+                zoom: 3,
+                controls: ['zoomControl', 'fullscreenControl', 'typeSelector']
+            });
+            
+            // Массив проектов - {{ projects_count }} объекта
+            const projects = [
+                {name: 'Создание специализированного комплекса по перевалке бункерного топлива', city: 'г. Мурманск, грузовой район № 2', work: 'полный комплекс инженерных изысканий', coords: [68.97917, 33.09251], year: '2018'},
+                {name: 'Каток с искусственным льдом крытый', city: 'г. Салехард Ямало-Ненецкого автономного округа', work: 'полный комплекс инженерных изысканий', coords: [66.52977, 66.61452], year: '2019'},
+                // ... все остальные проекты
+                {name: 'Проект производства ремонтных дноуглубительных работ (дополнительный)', city: 'г. Таганрог, морской торговый порт, акватория Таганрогского залива', work: 'геология и геодезия', coords: [47.23617, 38.89688], year: '2020'}
+            ];
+            
+            // Обновляем счетчик проектов
+            document.getElementById('total-projects').textContent = projects.length;
+            
+            // Создание кластеризатора
+            const clusterer = new ymaps.Clusterer({
+                clusterDisableClickZoom: true,
+                clusterOpenBalloonOnClick: true,
+                clusterBalloonContentLayout: 'cluster#balloonTwoColumns',
+                clusterBalloonPanelMaxMapArea: 0,
+                clusterBalloonContentLayoutWidth: 300,
+                clusterBalloonContentLayoutHeight: 200,
+                clusterBalloonLeftColumnWidth: 150
+            });
+            
+            // Добавление меток
+            projects.forEach(project => {
+                const placemark = new ymaps.Placemark(
+                    project.coords,
+                    {
+                        balloonContentHeader: `<strong>${project.name}</strong>`,
+                        balloonContentBody: `
+                            <p><strong>Местоположение:</strong> ${project.city}</p>
+                            <p><strong>Год:</strong> ${project.year}</p>
+                            <p><strong>Состав работ:</strong> ${project.work}</p>
+                        `,
+                        hintContent: project.name
+                    },
+                    {
+                        iconLayout: 'default#image',
+                        iconImageHref: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+                        iconImageSize: [40, 40],
+                        iconImageOffset: [-20, -40]
+                    }
+                );
+                clusterer.add(placemark);
+            });
+            
+            map.geoObjects.add(clusterer);
+            
+            // Автоматический подбор масштаба
+            if (projects.length > 0) {
+                map.setBounds(clusterer.getBounds(), {
+                    checkZoomRange: true,
+                    zoomMargin: 50
+                });
+            }
+            
+            // Добавляем элементы управления
+            map.controls.add('searchControl');
+            
+            // Обработчик ресайза окна
+            window.addEventListener('resize', () => {
+                map.container.fitToViewport();
+            });
+        });
+    }
+
+    // Загрузка карты при загрузке страницы
+    document.addEventListener('DOMContentLoaded', loadYandexMap);
+    
+    // AJAX отправка формы заявки
+    document.addEventListener('DOMContentLoaded', function() {
+        const requestForm = document.getElementById('requestForm');
+        
+        if (requestForm) {
+            requestForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': csrfToken
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        requestForm.reset();
+                        document.getElementById('modalOverlay').classList.remove('active');
+                        document.body.style.overflow = '';
+                    } else {
+                        alert('Ошибка: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Произошла ошибка при отправке формы');
+                });
+            });
+        }
+    });
+</script>
+{% endblock %}

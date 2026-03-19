@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ДОНГИС | Ведущая инженерная компания России{% endblock %}</title>
+    
+    <!-- CSS файлы -->
+    <link rel="stylesheet" href="{% static 'mainapp/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'mainapp/css/slider.css' %}">
+    
+    <!-- Шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Фавикон -->
+    <link rel="icon" href="{% static 'mainapp/img/favicon.ico' %}">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Дополнительные стили -->
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Кнопка заявки -->
+    <button class="btn-request" id="requestBtn">
+        <i class="fas fa-paper-plane"></i> Оставить заявку
+    </button>
+
+    <!-- Навигация -->
+    <header class="header">
+        <div class="container">
+            <div class="header-logo-container">
+                <img src="{% static 'mainapp/img/favicon.ico' %}" alt="ДОНГИС" class="header-logo">
+                <div class="logo">
+                    <a href="{% url 'index' %}">ДОНГИС</a>
+                </div>
+            </div>
+            <nav class="nav">
+                <a href="{% url 'index' %}">Главная</a>
+                <a href="{% url 'index' %}#about">О компании</a>
+                <a href="{% url 'services' %}">Услуги</a>
+                <a href="{% url 'index' %}#projects-map">Проекты</a>
+                <a href="{% url 'index' %}#contact">Контакты</a>
+            </nav>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Мобильное меню -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="{% url 'index' %}">Главная</a>
+        <a href="{% url 'index' %}#about">О компании</a>
+        <a href="{% url 'services' %}">Услуги</a>
+        <a href="{% url 'index' %}#projects-map">Проекты</a>
+        <a href="{% url 'index' %}#contact">Контакты</a>
+    </div>
+
+    <!-- Основной контент -->
+    {% block content %}{% endblock %}
+
+    <!-- Футер -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>ДОНГИС</h3>
+                    <p>Ведущая инженерная компания России</p>
+                </div>
+                <div class="footer-contacts">
+                    <h4>Контакты</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Россия, г. Ростов-на-Дону, пер. Братский 48/19, оф. 3,4.</p>
+                    <p><i class="fas fa-phone"></i> +7 (988) 898-16-04</p>
+                    <p><i class="fas fa-envelope"></i> info@don-gis.ru</p>
+                </div>
+                <div class="footer-social">
+                    <h4>Мы в соцсетях</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-max"></i></a>
+                     </div>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                <p>&copy; <span id="currentYear">2023</span> ДОНГИС. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно заявки -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="requestModal">
+            <div class="modal-header">
+                <h3>Оставить заявку</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="requestForm" method="post" action="{% url 'submit_request' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="fullName">Как к вам обращаться? *</label>
+                        <input type="text" id="fullName" name="fullName" required placeholder="Введите имя">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Номер телефона *</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="+7 (___) ___-__-__">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Почта</label>
+                        <input type="email" id="email" name="email" placeholder="example@mail.ru">
+                    </div>
+                    <div class="form-buttons">
+                        <button type="submit" class="btn-submit">Отправить</button>
+                        <button type="button" class="btn-back" id="btnBack">Назад</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript файлы -->
+    <script src="{% static 'mainapp/js/main.js' %}"></script>
+    <script src="{% static 'mainapp/js/slider.js' %}"></script>
+    
+    <!-- Дополнительные скрипты -->
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
