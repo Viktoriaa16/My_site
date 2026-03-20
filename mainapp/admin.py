@@ -1,122 +1,108 @@
 from django.contrib import admin
-from django.core.mail import send_mail
-from django.conf import settings
 from django.contrib import messages
-from django.shortcuts import redirect, render
-from django.urls import path
 from .models import ServiceRequest
 
 @admin.register(ServiceRequest)
 class ServiceRequestAdmin(admin.ModelAdmin):
-    # Обычные поля без цвета
+    # Отображаемые поля
     list_display = [
         'id', 
-        'full_name', 
         'phone', 
-        'email', 
-        'status',  # Просто статус без цвета
+        'status', 
         'created_at'
     ]
     
-    # По каким полям можно кликнуть
-    list_display_links = ['id', 'full_name']
+    # Кликабельные поля
+    list_display_links = ['id', 'phone']
     
     # Фильтры справа
     list_filter = ['status', 'created_at']
     
-    # Поиск
-    search_fields = ['full_name', 'phone', 'email']
+    # Поиск по телефону
+    search_fields = ['phone']
     
     # Сортировка
     ordering = ['-created_at']
     
-    # Какие поля редактировать прямо в списке
-    list_editable = ['status']  # Теперь работает, потому что status есть в list_display
+    # Поля для редактирования прямо в списке
+    list_editable = ['status']
     
-    # Добавляем действия
-    actions = ['mark_as_read', 'mark_as_unread', 'send_email_response']
+    # Поля для формы редактирования
+    fieldsets = (
+        ('Информация о заявке', {
+            'fields': ('phone', 'status', 'created_at')
+        }),
+        ('Комментарий администратора', {
+            'fields': ('admin_comment',),
+            'classes': ('wide',),
+        }),
+    )
     
-    # Действие: отметить как прочитанное
-    def mark_as_read(self, request, queryset):
-        updated = queryset.update(status='read')
-        self.message_user(
-            request, 
-            f'{updated} заявок отмечено как прочитанные',
-            messages.SUCCESS
-        )
-    mark_as_read.short_description = "✅ Отметить как прочитанное"
+    # Только для чтения (дату создания нельзя менять)
+    readonly_fields = ['created_at']
     
-    # Действие: отметить как новое
-    def mark_as_unread(self, request, queryset):
+    # Действия над заявками
+    actions = ['mark_as_new', 'mark_as_in_progress', 'mark_as_completed', 
+               'mark_as_rejected', 'mark_as_reviewed']
+    
+    def mark_as_new(self, request, queryset):
         updated = queryset.update(status='new')
         self.message_user(
             request, 
             f'{updated} заявок отмечено как новые',
             messages.SUCCESS
         )
-    mark_as_unread.short_description = "🔄 Отметить как новое"
+    mark_as_new.short_description = "🆕 Отметить как новые"
     
-    # Действие: отправить ответ на почту
-    def send_email_response(self, request, queryset):
-        # Сохраняем ID выбранных заявок в сессии
-        request.session['selected_requests'] = [obj.id for obj in queryset]
-        
-        # Перенаправляем на страницу отправки ответа
-        return redirect('admin:send-response')
+    def mark_as_in_progress(self, request, queryset):
+        updated = queryset.update(status='in_progress')
+        self.message_user(
+            request, 
+            f'{updated} заявок отмечено как в обработке',
+            messages.SUCCESS
+        )
+    mark_as_in_progress.short_description = "⚙️ Отметить как в обработке"
     
-    send_email_response.short_description = "✉️ Отправить ответ на почту"
+    def mark_as_completed(self, request, queryset):
+        updated = queryset.update(status='completed')
+        self.message_user(
+            request, 
+            f'{updated} заявок отмечено как завершенные',
+            messages.SUCCESS
+        )
+    mark_as_completed.short_description = "✅ Отметить как завершенные"
     
-    # Кастомные URL
-    def get_urls(self):
-        urls = super().get_urls()
-        custom_urls = [
-            path(
-                'send-response/',
-                self.admin_site.admin_view(self.send_response_view),
-                name='send-response',
-            ),
-        ]
-        return custom_urls + urls
+    def mark_as_rejected(self, request, queryset):
+        updated = queryset.update(status='rejected')
+        self.message_user(
+            request, 
+            f'{updated} заявок отмечено как отклоненные',
+            messages.SUCCESS
+        )
+    mark_as_rejected.short_description = "❌ Отметить как отклоненные"
     
-    def send_response_view(self, request):
-        if request.method == 'POST':
-            # Получаем данные из формы
-            recipient_email = request.POST.get('email')
-            subject = request.POST.get('subject')
-            message_body = request.POST.get('message')
-            request_id = request.POST.get('request_id')
-            
-            if not recipient_email or not subject or not message_body:
-                messages.error(request, 'Пожалуйста, заполните все поля')
-                return redirect('..')
-            
-            try:
-                # Отправляем письмо
-                send_mail(
-                    subject=subject,
-                    message=message_body,
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[recipient_email],
-                    fail_silently=False,
-                )
-                
-                # Помечаем заявку как обработанную
-                if request_id:
-                    ServiceRequest.objects.filter(id=request_id).update(status='completed')
-                
-                messages.success(request, f'Ответ успешно отправлен на {recipient_email}')
-                return redirect('..')
-                
-            except Exception as e:
-                messages.error(request, f'Ошибка при отправке: {str(e)}')
-                return redirect('..')
-        
-        # GET запрос - показываем форму
-        selected_ids = request.session.get('selected_requests', [])
-        requests_data = ServiceRequest.objects.filter(id__in=selected_ids)
-        
-        context = {
-            'requests': requests_data,
-            'title': 'Отправить ответ клиенту',
+    def mark_as_reviewed(self, request, queryset):
+        updated = queryset.update(status='reviewed')
+        self.message_user(
+            request, 
+            f'{updated} заявок отмечено как рассмотренные',
+            messages.SUCCESS
+        )
+    mark_as_reviewed.short_description = "👁️ Отметить как рассмотренные"
+    
+    # Цвета для статусов в админке
+    def status(self, obj):
+        colors = {
+            'new': 'red',
+            'in_progress': 'orange',
+            'completed': 'green',
+            'rejected': 'gray',
+            'reviewed': 'blue',
         }
-        return render(request, 'admin/send_response.html', context)
+        return format_html(
+            '<span style="color: {}; font-weight: bold;">{}</span>',
+            colors.get(obj.status, 'black'),
+            obj.get_status_display()
+        )
+    status.short_description = 'Статус'
+    status.admin_order_field = 'status'

@@ -130,7 +130,7 @@
     right: 30px;
 }
 
-/* Адаптивность слайдера */
+/* Адаптивность  слайдера */
 @media (max-width: 992px) {
     .slider-section {
         height: 70vh;

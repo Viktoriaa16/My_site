@@ -6,16 +6,13 @@ from django.conf import settings
 from .models import ServiceRequest
 
 def index(request):
-    # Простая view без проверки аутентификации
     context = {
         'title': 'ДОНГИС | Ведущая инженерная компания России',
         'page_title': 'ДОНГИС - Ведущая инженерная компания России',
-        'projects_count': 15  # Примерное количество проектов
     }
     return render(request, 'mainapp/index.html', context)
 
 def services(request):
-    # View для страницы услуг
     context = {
         'title': 'Услуги | ДОНГИС',
         'page_title': 'Наши услуги'
@@ -25,26 +22,24 @@ def services(request):
 @csrf_exempt
 def submit_request(request):
     """
-    Обработка формы заявки
+    Обработка формы заявки (только телефон)
     """
     if request.method == 'POST':
-        full_name = request.POST.get('fullName')
         phone = request.POST.get('phone')
-        email = request.POST.get('email')
         
-        if not full_name or not phone:
+        if not phone:
             return JsonResponse({
                 'success': False,
-                'message': 'Пожалуйста, заполните имя и телефон'
+                'message': 'Пожалуйста, укажите номер телефона'
             })
         
         try:
+            # Создаем заявку - статус автоматически 'new'
             service_request = ServiceRequest.objects.create(
-                full_name=full_name,
-                phone=phone,
-                email=email if email else None
+                phone=phone
             )
             
+            # ОТПРАВЛЯЕМ УВЕДОМЛЕНИЕ АДМИНУ (эту строку вернули)
             send_notification_email(service_request)
             
             return JsonResponse({
@@ -66,9 +61,9 @@ def submit_request(request):
 
 def send_notification_email(request_obj):
     """
-    Отправка уведомления о новой заявке
+    Отправка уведомления о новой заявке (ТОЛЬКО АДМИНУ)
     """
-    subject = f'Новая заявка с сайта ДОНГИС #{request_obj.id}'
+    subject = f'🆕 Новая заявка с сайта ДОНГИС #{request_obj.id}'
     
     message = f"""
 Здравствуйте!
@@ -78,9 +73,8 @@ def send_notification_email(request_obj):
 ДЕТАЛИ ЗАЯВКИ:
 ----------------
 Номер заявки: {request_obj.id}
-Как к вам обращаться: {request_obj.full_name}
 Телефон: {request_obj.phone}
-Почта: {request_obj.email or 'не указана'}
+Статус: Новая
 Дата и время: {request_obj.created_at.strftime('%d.%m.%Y %H:%M')}
 
 ССЫЛКА ДЛЯ ПРОСМОТРА:
@@ -95,6 +89,7 @@ http://127.0.0.1:8000/admin/mainapp/servicerequest/{request_obj.id}/change/
 Ваш сайт ДОНГИС
 """
     
+    # Отправляем администраторам сайта
     admin_emails = [admin[1] for admin in settings.ADMINS]
     
     try:
@@ -105,5 +100,6 @@ http://127.0.0.1:8000/admin/mainapp/servicerequest/{request_obj.id}/change/
             recipient_list=admin_emails,
             fail_silently=False,
         )
+        print(f"Письмо отправлено на {admin_emails}")
     except Exception as e:
         print(f"Ошибка при отправке email: {e}")

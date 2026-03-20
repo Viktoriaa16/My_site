@@ -5,33 +5,22 @@ class ServiceRequest(models.Model):
     # Статусы заявки
     STATUS_CHOICES = [
         ('new', '🆕 Новая'),
-        ('read', '👁️ Прочитано'),
         ('in_progress', '⚙️ В обработке'),
         ('completed', '✅ Завершена'),
         ('rejected', '❌ Отклонена'),
+        ('reviewed', '👁️ Рассмотрено'),  # добавил "рассмотрено"
     ]
     
-    full_name = models.CharField(
-        max_length=255,
-        verbose_name='Как к вам обращаться'
-    )
-    
+    # Только телефон
     phone = models.CharField(
         max_length=20,
         verbose_name='Телефон'
     )
     
-    email = models.EmailField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name='Почта'
-    )
-    
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
-        default='new',
+        default='new',  # по умолчанию новая
         verbose_name='Статус'
     )
     
@@ -54,10 +43,7 @@ class ServiceRequest(models.Model):
     class Meta:
         verbose_name = 'Заявка'
         verbose_name_plural = 'Заявки'
-        ordering = ['-created_at']
+        ordering = ['-created_at']  # новые сверху
     
     def __str__(self):
-        return f"{self.full_name} - {self.phone}"
-    
-    def get_status_display(self):
-        return dict(self.STATUS_CHOICES).get(self.status, self.status)
+        return f"Заявка #{self.id} - {self.phone}"

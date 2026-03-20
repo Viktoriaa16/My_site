@@ -133,7 +133,7 @@ class Slider {
     }
 }
 
-// Инициализация слайдера при загрузке страницы
+// Инициализация  слайдера при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
     if (document.querySelector('.slider-section')) {
         new Slider();
