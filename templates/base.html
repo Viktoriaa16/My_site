@@ -65,54 +65,68 @@
     {% block content %}{% endblock %}
 
     <!-- Футер -->
-    <footer class="footer" id="contact">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <h3>ДОНГИС</h3>
-                    <p>Ведущая инженерная компания России</p>
-                </div>
-                <div class="footer-contacts">
-                    <h4>Контакты</h4>
-                    <p><i class="fas fa-map-marker-alt"></i> Россия, г. Ростов-на-Дону, пер. Братский 48/19, оф. 3,4.</p>
-                    <p><i class="fas fa-phone"></i> +7 (988) 898-16-04</p>
-                    <p><i class="fas fa-envelope"></i> info@don-gis.ru</p>
-                </div>
-                <div class="footer-social">
-                    <h4>Мы в соцсетях</h4>
-                    <div class="social-icons">
-                        <a href="#"><i class="fab fa-max"></i></a>
-                     </div>
-                </div>
+<footer class="footer" id="contact">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h3>ДОНГИС</h3>
+                <p>Ведущая инженерная компания России</p>
             </div>
-            <div class="footer-copyright">
-                <p>&copy; <span id="currentYear">2023</span> ДОНГИС. Все права защищены.</p>
+            <div class="footer-contacts">
+                <h4>Контакты</h4>
+                <p><i class="fas fa-map-marker-alt"></i> {{ contacts.address }}</p>
+                <p><i class="fas fa-phone"></i> {{ contacts.phone }}</p>
+                <p><i class="fas fa-envelope"></i> {{ contacts.email }}</p>
+                {% if contacts.working_hours %}
+                <p><i class="fas fa-clock"></i> {{ contacts.working_hours }}</p>
+                {% endif %}
+            </div>
+            <div class="footer-social">
+                <h4>Мы в соцсетях</h4>
+                <div class="social-icons">
+                    {% if contacts.vk_link %}
+                    <a href="{{ contacts.vk_link }}" target="_blank"><i class="fab fa-vk"></i></a>
+                    {% endif %}
+                    {% if contacts.telegram_link %}
+                    <a href="{{ contacts.telegram_link }}" target="_blank"><i class="fab fa-telegram"></i></a>
+                    {% endif %}
+                </div>
             </div>
         </div>
-    </footer>
-
-    <!-- Модальное окно заявки -->
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal" id="requestModal">
-            <div class="modal-header">
-                <h3>Оставить заявку</h3>
-                <button class="modal-close" id="modalClose">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="requestForm" method="post" action="{% url 'submit_request' %}">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="phone">Номер телефона *</label>
-                        <input type="tel" id="phone" name="phone" required placeholder="+7 (___) ___-__-__">
-                    </div>
-                    <div class="form-buttons">
-                        <button type="submit" class="btn-submit">Отправить</button>
-                        <button type="button" class="btn-back" id="btnBack">Назад</button>
-                    </div>
-                </form>
-            </div>
+        <div class="footer-copyright">
+            <p>&copy; <span id="currentYear">2023</span> ДОНГИС. Все права защищены.</p>
         </div>
     </div>
+</footer>
+   
+   <!-- Модальное окно заявки -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="requestModal">
+        <div class="modal-header">
+            <h3>Оставить заявку</h3>
+            <button class="modal-close" id="modalClose">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="requestForm" method="post" action="{% url 'submit_request' %}">
+                {% csrf_token %}
+                <div class="form-group" id="phoneGroup">
+                    <label for="phone">Номер телефона *</label>
+                    <input type="tel" id="phone" name="phone" placeholder="+7 (___) ___-__-__">
+                    <div class="error-message" id="phoneError">Пожалуйста, введите корректный номер телефона</div>
+                </div>
+                <div class="form-group" id="subjectGroup">
+                    <label for="subject">Тема обращения *</label>
+                    <textarea id="subject" name="subject" rows="1" placeholder="Опишите, по какому вопросу вы обращаетесь..."></textarea>
+                    <div class="error-message" id="subjectError">Пожалуйста, введите тему обращения</div>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn-submit">Отправить</button>
+                    <button type="button" class="btn-back" id="btnBack">Назад</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
     <!-- JavaScript файлы -->
     <script src="{% static 'mainapp/js/main.js' %}"></script>

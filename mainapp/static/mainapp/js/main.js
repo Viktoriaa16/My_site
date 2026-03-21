@@ -93,44 +93,172 @@ function setCurrentYear() {
     });
 }
 
+// Функции валидации
+function validatePhone(phone) {
+    const phoneRegex = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/;
+    return phoneRegex.test(phone);
+}
+
+function validateSubject(subject) {
+    return subject && subject.trim() !== '';
+}
+
+function showFieldError(fieldId, hasError) {
+    const fieldGroup = document.getElementById(fieldId);
+    if (fieldGroup) {
+        if (hasError) {
+            fieldGroup.classList.add('error');
+            fieldGroup.classList.remove('success');
+        } else {
+            fieldGroup.classList.remove('error');
+            fieldGroup.classList.add('success');
+        }
+    }
+}
+
+function clearValidationStyles() {
+    const phoneGroup = document.getElementById('phoneGroup');
+    const subjectGroup = document.getElementById('subjectGroup');
+    
+    if (phoneGroup) phoneGroup.classList.remove('error', 'success');
+    if (subjectGroup) subjectGroup.classList.remove('error', 'success');
+}
+
 // Обработка формы заявки
 function initRequestForm() {
     const requestBtn = document.getElementById('requestBtn');
     const modalOverlay = document.getElementById('modalOverlay');
     const modalClose = document.getElementById('modalClose');
     const btnBack = document.getElementById('btnBack');
+    const requestForm = document.getElementById('requestForm');
     const phoneInput = document.getElementById('phone');
+    const subjectInput = document.getElementById('subject');
     
-    if (requestBtn && modalOverlay) {
-        // Открытие модального окна
-        requestBtn.addEventListener('click', () => {
-            modalOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
+    if (!requestBtn || !modalOverlay) return;
+    
+    // Открытие модального окна
+    requestBtn.addEventListener('click', () => {
+        modalOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        clearValidationStyles();
+        if (requestForm) requestForm.reset();
+    });
+    
+    // Закрытие модального окна
+    function closeModal() {
+        modalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+        clearValidationStyles();
+    }
+    
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+    if (btnBack) btnBack.addEventListener('click', closeModal);
+    
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) closeModal();
+    });
+    
+    // Маска для телефона
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+            let formattedValue = '';
+            
+            if (!x[2]) {
+                formattedValue = x[1];
+            } else {
+                formattedValue = '+7 (' + x[2];
+                if (x[3]) formattedValue += ') ' + x[3];
+                if (x[4]) formattedValue += '-' + x[4];
+                if (x[5]) formattedValue += '-' + x[5];
+            }
+            
+            e.target.value = formattedValue;
+            
+            const phoneGroup = document.getElementById('phoneGroup');
+            if (phoneGroup) phoneGroup.classList.remove('error');
         });
-        
-        // Закрытие модального окна
-        function closeModal() {
-            modalOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-        
-        if (modalClose) modalClose.addEventListener('click', closeModal);
-        if (btnBack) btnBack.addEventListener('click', closeModal);
-        
-        // Закрытие по клику на фон
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) {
-                closeModal();
+    }
+    
+    // Валидация темы обращения в реальном времени
+    if (subjectInput) {
+        subjectInput.addEventListener('input', function() {
+            const subjectGroup = document.getElementById('subjectGroup');
+            if (subjectGroup) {
+                if (this.value.trim() !== '') {
+                    subjectGroup.classList.remove('error');
+                    subjectGroup.classList.add('success');
+                } else {
+                    subjectGroup.classList.remove('success');
+                    subjectGroup.classList.add('error');
+                }
             }
         });
-        
-        // Маска  для телефона
-        if (phoneInput) {
-            phoneInput.addEventListener('input', function(e) {
-                let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-                e.target.value = !x[2] ? x[1] : '+7 (' + x[2] + (x[3] ? ') ' + x[3] : '') + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
-            });
-        }
+    }
+    
+    // Отправка формы
+    if (requestForm) {
+        requestForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const phone = phoneInput ? phoneInput.value.trim() : '';
+            const subject = subjectInput ? subjectInput.value.trim() : '';
+            
+            const isPhoneValid = validatePhone(phone);
+            const isSubjectValid = validateSubject(subject);
+            
+            showFieldError('phoneGroup', !isPhoneValid);
+            showFieldError('subjectGroup', !isSubjectValid);
+            
+            // Одно сообщение об ошибке
+            if (!isPhoneValid || !isSubjectValid) {
+                let errorMessage = '';
+                if (!isPhoneValid && !isSubjectValid) {
+                    errorMessage = 'Пожалуйста, заполните все поля корректно:\n- Номер телефона должен быть в формате +7 (XXX) XXX-XX-XX\n- Введите тему обращения';
+                } else if (!isPhoneValid) {
+                    errorMessage = 'Пожалуйста, введите корректный номер телефона в формате +7 (XXX) XXX-XX-XX';
+                } else if (!isSubjectValid) {
+                    errorMessage = 'Пожалуйста, введите тему обращения';
+                }
+                alert(errorMessage);
+                return;
+            }
+            
+            // Отключаем кнопку
+            const submitBtn = requestForm.querySelector('.btn-submit');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Отправка...';
+            
+            try {
+                const formData = new FormData(requestForm);
+                const response = await fetch(requestForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert(' Спасибо! Ваша заявка принята. Наш менеджер свяжется с вами.');
+                    closeModal();
+                    requestForm.reset();
+                    clearValidationStyles();
+                } else {
+                    // Одно сообщение об ошибке
+                    alert(' ' + (result.message || 'Произошла ошибка. Попробуйте позже.'));
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert(' Ошибка сети. Попробуйте позже.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        });
     }
 }
 

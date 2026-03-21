@@ -1,108 +1,44 @@
 from django.contrib import admin
 from django.contrib import messages
-from .models import ServiceRequest
+from .models import ContactInfo, SiteStatistics
 
-@admin.register(ServiceRequest)
-class ServiceRequestAdmin(admin.ModelAdmin):
-    # Отображаемые поля
-    list_display = [
-        'id', 
-        'phone', 
-        'status', 
-        'created_at'
-    ]
-    
-    # Кликабельные поля
-    list_display_links = ['id', 'phone']
-    
-    # Фильтры справа
-    list_filter = ['status', 'created_at']
-    
-    # Поиск по телефону
-    search_fields = ['phone']
-    
-    # Сортировка
-    ordering = ['-created_at']
-    
-    # Поля для редактирования прямо в списке
-    list_editable = ['status']
-    
-    # Поля для формы редактирования
+@admin.register(ContactInfo)
+class ContactInfoAdmin(admin.ModelAdmin):
     fieldsets = (
-        ('Информация о заявке', {
-            'fields': ('phone', 'status', 'created_at')
+        ('Основные контакты', {
+            'fields': ('phone', 'email', 'address', 'working_hours', 'map_link')
         }),
-        ('Комментарий администратора', {
-            'fields': ('admin_comment',),
-            'classes': ('wide',),
+        ('Социальные сети', {
+            'fields': ('vk_link', 'telegram_link'),
+            'classes': ('wide',)
         }),
     )
     
-    # Только для чтения (дату создания нельзя менять)
-    readonly_fields = ['created_at']
+    def has_add_permission(self, request):
+        # Запрещаем добавлять новые записи, если уже есть
+        if ContactInfo.objects.exists():
+            return False
+        return super().has_add_permission(request)
     
-    # Действия над заявками
-    actions = ['mark_as_new', 'mark_as_in_progress', 'mark_as_completed', 
-               'mark_as_rejected', 'mark_as_reviewed']
+    def has_delete_permission(self, request, obj=None):
+        # Запрещаем удалять единственную запись
+        return False
+
+@admin.register(SiteStatistics)
+class SiteStatisticsAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('Статистика компании', {
+            'fields': ('years_experience', 'projects_completed', 'federal_projects', 'employees_count', 'regions_count'),
+            'description': 'Цифры, отображаемые на главной странице сайта'
+        }),
+    )
     
-    def mark_as_new(self, request, queryset):
-        updated = queryset.update(status='new')
-        self.message_user(
-            request, 
-            f'{updated} заявок отмечено как новые',
-            messages.SUCCESS
-        )
-    mark_as_new.short_description = "🆕 Отметить как новые"
+    def has_add_permission(self, request):
+        # Запрещаем добавлять новые записи, если уже есть
+        if SiteStatistics.objects.exists():
+            return False
+        return super().has_add_permission(request)
     
-    def mark_as_in_progress(self, request, queryset):
-        updated = queryset.update(status='in_progress')
-        self.message_user(
-            request, 
-            f'{updated} заявок отмечено как в обработке',
-            messages.SUCCESS
-        )
-    mark_as_in_progress.short_description = "⚙️ Отметить как в обработке"
-    
-    def mark_as_completed(self, request, queryset):
-        updated = queryset.update(status='completed')
-        self.message_user(
-            request, 
-            f'{updated} заявок отмечено как завершенные',
-            messages.SUCCESS
-        )
-    mark_as_completed.short_description = "✅ Отметить как завершенные"
-    
-    def mark_as_rejected(self, request, queryset):
-        updated = queryset.update(status='rejected')
-        self.message_user(
-            request, 
-            f'{updated} заявок отмечено как отклоненные',
-            messages.SUCCESS
-        )
-    mark_as_rejected.short_description = "❌ Отметить как отклоненные"
-    
-    def mark_as_reviewed(self, request, queryset):
-        updated = queryset.update(status='reviewed')
-        self.message_user(
-            request, 
-            f'{updated} заявок отмечено как рассмотренные',
-            messages.SUCCESS
-        )
-    mark_as_reviewed.short_description = "👁️ Отметить как рассмотренные"
-    
-    # Цвета для статусов в админке
-    def status(self, obj):
-        colors = {
-            'new': 'red',
-            'in_progress': 'orange',
-            'completed': 'green',
-            'rejected': 'gray',
-            'reviewed': 'blue',
-        }
-        return format_html(
-            '<span style="color: {}; font-weight: bold;">{}</span>',
-            colors.get(obj.status, 'black'),
-            obj.get_status_display()
-        )
-    status.short_description = 'Статус'
-    status.admin_order_field = 'status'
+    def has_delete_permission(self, request, obj=None):
+        # Запрещаем удалять единственную запись
+        return False

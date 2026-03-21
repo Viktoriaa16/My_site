@@ -414,15 +414,65 @@ section {
     font-family: 'Inter', sans-serif;
 }
 
-.form-group input {
+
+
+.form-group input,
+.form-group textarea {
     width: 100%;
-    padding: 15px;
+    padding: 0 15px;
     border: 2px solid #e1e5eb;
     border-radius: 10px;
     font-size: 16px;
     transition: all 0.3s ease;
     background: #f8f9fa;
     font-family: 'Inter', sans-serif;
+    box-sizing: border-box;
+    line-height: 1.5;
+}
+
+.form-group input {
+    height: 52px;
+}
+.form-group textarea {
+    height: 52px;
+    resize: none;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+/* Убираем возможность растягивать textarea */
+.form-group textarea {
+    resize: none !important;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #1a5276;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(26,82,118,0.1);
+}
+
+/* Стили для ошибок */
+.error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+    display: none;
+}
+
+.form-group.error input,
+.form-group.error textarea {
+    border-color: #dc3545 !important;
+}
+
+.form-group.error .error-message {
+    display: block;
+}
+
+.form-group.success input,
+.form-group.success textarea {
+    border-color: #28a745 !important;
 }
 
 .form-group input:focus {

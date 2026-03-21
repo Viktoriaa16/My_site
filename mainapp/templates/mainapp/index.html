@@ -182,26 +182,25 @@
         </div>
     </section>
 
-    <!-- Блок с цифрами -->
     <section class="numbers" id="numbers">
-        <div class="container">
-            <h2 class="section-title">География проектов</h2>
-            <div class="numbers-grid">
-                <div class="number-card">
-                    <div class="number" data-count="29">0</div>
-                    <div class="number-label">лет успешной работы</div>
-                </div>
-                <div class="number-card">
-                    <div class="number" data-count="{{ projects_count }}">0</div>
-                    <div class="number-label">ключевых объектов на карте</div>
-                </div>
-                <div class="number-card">
-                    <div class="number" data-count="520">0</div>
-                    <div class="number-label">высококвалифицированных сотрудников</div>
-                </div>
+    <div class="container">
+        <h2 class="section-title">География проектов</h2>
+        <div class="numbers-grid">
+            <div class="number-card">
+                <div class="number" data-count="{{ stats.years_experience }}">0</div>
+                <div class="number-label">лет успешной работы</div>
+            </div>
+            <div class="number-card">
+                <div class="number" data-count="{{ projects_count }}">0</div>
+                <div class="number-label">ключевых объектов на карте</div>
+            </div>
+            <div class="number-card">
+                <div class="number" data-count="{{ stats.employees_count }}">0</div>
+                <div class="number-label">высококвалифицированных сотрудников</div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Карта проектов -->
     <section class="projects-map" id="projects-map">
