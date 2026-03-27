@@ -9,6 +9,11 @@
     <!-- CSS файлы -->
     <link rel="stylesheet" href="{% static 'mainapp/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'mainapp/css/slider.css' %}">
+    <link rel="stylesheet" href="{% static 'mainapp/css/project.css' %}">
+    <link rel="stylesheet" href="{% static 'mainapp/css/it.css' %}">
+    <link rel="stylesheet" href="{% static 'mainapp/css/tech.css' %}">
+    <link rel="stylesheet" href="{% static 'mainapp/css/contacts.css' %}">
+    <link rel="stylesheet" href="{% static 'mainapp/css/map.css' %}">
     
     <!-- Шрифты -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,7 +21,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Фавикон -->
-    <link rel="icon" href="{% static 'mainapp/img/favicon.ico' %}">
+    <link rel="icon" href="{% static 'mainapp/images/logo.ico' %}">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -34,7 +39,7 @@
     <header class="header">
         <div class="container">
             <div class="header-logo-container">
-                <img src="{% static 'mainapp/img/favicon.ico' %}" alt="ДОНГИС" class="header-logo">
+                <img src="{% static 'mainapp/images/logo.ico' %}" alt="ДОНГИС" class="header-logo">
                 <div class="logo">
                     <a href="{% url 'index' %}">ДОНГИС</a>
                 </div>
@@ -42,9 +47,10 @@
             <nav class="nav">
                 <a href="{% url 'index' %}">Главная</a>
                 <a href="{% url 'index' %}#about">О компании</a>
-                <a href="{% url 'services' %}">Услуги</a>
-                <a href="{% url 'index' %}#projects-map">Проекты</a>
-                <a href="{% url 'index' %}#contact">Контакты</a>
+                <a href="{% url 'projects' %}">Проекты</a>
+                 <a href="{% url 'it' %}">IT</a>
+                 <a href="{% url 'tech' %}">Техника</a>
+                 <a href="{% url 'contacts' %}">Контакты</a>
             </nav>
             <button class="mobile-menu-btn" id="mobileMenuBtn">
                 <i class="fas fa-bars"></i>
@@ -56,8 +62,8 @@
     <div class="mobile-menu" id="mobileMenu">
         <a href="{% url 'index' %}">Главная</a>
         <a href="{% url 'index' %}#about">О компании</a>
-        <a href="{% url 'services' %}">Услуги</a>
-        <a href="{% url 'index' %}#projects-map">Проекты</a>
+        <a href="{% url 'projects' %}">Проекты</a>  
+        <a href="{% url 'index' %}#projects-map">Карта проектов</a>
         <a href="{% url 'index' %}#contact">Контакты</a>
     </div>
 
@@ -72,6 +78,19 @@
                 <h3>ДОНГИС</h3>
                 <p>Ведущая инженерная компания России</p>
             </div>
+            
+            <div class="footer-nav">
+                <h4>Навигация</h4>
+                <ul class="footer-nav-list">
+                    <li><a href="{% url 'index' %}">Главная</a></li>
+                    <li><a href="{% url 'index' %}#about">О компании</a></li>
+                    <li><a href="{% url 'projects' %}">Проекты</a></li>
+                    <li><a href="{% url 'it' %}">IT</a></li>
+                    <li><a href="{% url 'tech' %}">Техника</a></li>
+                    <li><a href="{% url 'contacts' %}">Контакты</a></li>
+                </ul>
+            </div>
+            
             <div class="footer-contacts">
                 <h4>Контакты</h4>
                 <p><i class="fas fa-map-marker-alt"></i> {{ contacts.address }}</p>
@@ -81,24 +100,13 @@
                 <p><i class="fas fa-clock"></i> {{ contacts.working_hours }}</p>
                 {% endif %}
             </div>
-            <div class="footer-social">
-                <h4>Мы в соцсетях</h4>
-                <div class="social-icons">
-                    {% if contacts.vk_link %}
-                    <a href="{{ contacts.vk_link }}" target="_blank"><i class="fab fa-vk"></i></a>
-                    {% endif %}
-                    {% if contacts.telegram_link %}
-                    <a href="{{ contacts.telegram_link }}" target="_blank"><i class="fab fa-telegram"></i></a>
-                    {% endif %}
-                </div>
-            </div>
         </div>
         <div class="footer-copyright">
-            <p>&copy; <span id="currentYear">2023</span> ДОНГИС. Все права защищены.</p>
+            <p>&copy; <span id="currentYear"></span> ДОНГИС. Все права защищены.</p>
         </div>
     </div>
 </footer>
-   
+            
    <!-- Модальное окно заявки -->
 <div class="modal-overlay" id="modalOverlay">
     <div class="modal" id="requestModal">
@@ -131,6 +139,12 @@
     <!-- JavaScript файлы -->
     <script src="{% static 'mainapp/js/main.js' %}"></script>
     <script src="{% static 'mainapp/js/slider.js' %}"></script>
+    <script src="{% static 'mainapp/js/project.js' %}"></script>
+    <script src="{% static 'mainapp/js/it.js' %}"></script>
+    <script src="{% static 'mainapp/js/tech.js' %}"></script>
+    <script src="{% static 'mainapp/js/contacts.js' %}"></script>
+    <script src="{% static 'mainapp/js/map.js' %}"></script>
+    
     
     <!-- Дополнительные скрипты -->
     {% block extra_js %}{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Наши проекты | Портфолио{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'mainapp/css/project.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="projects-hero">
+    <div class="container">
+        <h1>Наши проекты</h1>
+        <p>Нам доверяют проекты повышенной сложности</p>
+    </div>
+</section>
+
+<div class="projects-container" id="projectsContainer">
+    <!-- Проекты будут вставлены динамически через JS -->
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'mainapp/js/project.js' %}"></script>
+{% endblock %}

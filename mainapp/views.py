@@ -33,12 +33,14 @@ def index(request):
         'page_title': 'ДОНГИС - Ведущая инженерная компания России',
         'contacts': contacts,
         'stats': stats,
-        'projects_count': 15
     }
     return render(request, 'mainapp/index.html', context)
 
-def services(request):
-    """Страница услуг"""
+
+   
+
+def projects(request):
+    """Страница проектов"""
     contacts = ContactInfo.objects.first()
     
     if not contacts:
@@ -49,11 +51,65 @@ def services(request):
         )
     
     context = {
-        'title': 'Услуги | ДОНГИС',
-        'page_title': 'Наши услуги',
+        'title': 'Проекты | ДОНГИС',
+        'page_title': 'Наши проекты',
         'contacts': contacts,
     }
-    return render(request, 'mainapp/services.html', context)
+    return render(request, 'mainapp/projects.html', context)
+
+def it(request):
+    """Страница IT технологий"""
+    contacts = ContactInfo.objects.first()
+    
+    if not contacts:
+        contacts = ContactInfo.objects.create(
+            phone='+7 (988) 898-16-04',
+            email='info@don-gis.ru',
+            address='Россия, г. Ростов-на-Дону, пер. Братский 48/19, оф. 3,4.'
+        )
+    
+    context = {
+        'title': 'IT технологии | ДОНГИС',
+        'page_title': 'IT технологии',
+        'contacts': contacts,
+    }
+    return render(request, 'mainapp/it.html', context)
+
+def tech(request):
+    """Страница технического оснащения"""
+    contacts = ContactInfo.objects.first()
+    
+    if not contacts:
+        contacts = ContactInfo.objects.create(
+            phone='+7 (988) 898-16-04',
+            email='info@don-gis.ru',
+            address='Россия, г. Ростов-на-Дону, пер. Братский 48/19, оф. 3,4.'
+        )
+    
+    context = {
+        'title': 'Техническое оснащение | ДОНГИС',
+        'page_title': 'Техническое оснащение',
+        'contacts': contacts,
+    }
+    return render(request, 'mainapp/tech.html', context)
+
+def contacts(request):
+    """Страница контактов"""
+    contacts = ContactInfo.objects.first()
+    
+    if not contacts:
+        contacts = ContactInfo.objects.create(
+            phone='+7 (988) 898-16-04',
+            email='info@don-gis.ru',
+            address='Россия, г. Ростов-на-Дону, пер. Братский 48/19, оф. 3,4.'
+        )
+    
+    context = {
+        'title': 'Контакты | ДОНГИС',
+        'page_title': 'Контакты',
+        'contacts': contacts,
+    }
+    return render(request, 'mainapp/contacts.html', context)
 
 def validate_phone(phone):
     """Проверка формата телефона"""
@@ -73,7 +129,6 @@ def submit_request(request):
         phone = request.POST.get('phone')
         subject_text = request.POST.get('subject')
         
-        # Валидация
         errors = []
         
         if not phone:
@@ -89,29 +144,22 @@ def submit_request(request):
         if errors:
             return JsonResponse({
                 'success': False,
-                'message': 'Пожалуйста, исправьте ошибки',
                 'errors': errors
             })
         
         try:
-            # Отправляем письмо на почту
             send_notification_email(phone, subject_text)
-            
             return JsonResponse({
-                'success': True,
-                'message': 'Спасибо! Ваша заявка принята. Наш менеджер свяжется с вами.'
+                'success': True
             })
-            
         except Exception as e:
             return JsonResponse({
                 'success': False,
-                'message': 'Ошибка сервера. Попробуйте позже.',
                 'error': 'server'
             })
     
     return JsonResponse({
         'success': False,
-        'message': 'Метод не поддерживается',
         'error': 'method'
     })
 

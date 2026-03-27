@@ -39,7 +39,7 @@ body {
 .logo a {
     font-size: 24px;
     font-weight: 700;
-    color: #1a5276;
+    color: #0f493b;
     text-decoration: none;
 }
 
@@ -57,7 +57,7 @@ body {
 }
 
 .nav a:hover {
-    color: #1a5276;
+    color: #0f493b;
 }
 
 .mobile-menu-btn {
@@ -65,7 +65,7 @@ body {
     background: none;
     border: none;
     font-size: 24px;
-    color: #1a5276;
+    color: #0f493b;
     cursor: pointer;
 }
 
@@ -96,7 +96,7 @@ body {
 
 .mobile-menu a:hover {
     background-color: #f5f5f5;
-    color: #1a5276;
+    color: #0f493b;
 }
 
 /* Главный баннер */
@@ -130,7 +130,7 @@ body {
 
 .btn {
     display: inline-block;
-    background-color: #1a5276;
+    background-color: #0f493b;
     color: #fff;
     padding: 15px 40px;
     text-decoration: none;
@@ -143,7 +143,7 @@ body {
 }
 
 .btn:hover {
-    background-color: #154360;
+    background-color: #0f493b;
     transform: translateY(-3px);
 }
 
@@ -156,7 +156,7 @@ section {
     text-align: center;
     font-size: 36px;
     font-weight: 700;
-    color: #1a5276;
+    color: #0f493b;
     margin-bottom: 50px;
 }
 
@@ -173,7 +173,7 @@ section {
 }
 
 .about-content strong {
-    color: #1a5276;
+    color: #0f493b;
 }
 
 /* Блок с цифрами */
@@ -198,7 +198,7 @@ section {
 .number {
     font-size: 64px;
     font-weight: 700;
-    color: #1a5276;
+    color: #0f493b;
     margin-bottom: 15px;
 }
 
@@ -222,7 +222,7 @@ section {
 
 /* Футер */
 .footer {
-    background-color: #1a5276;
+    background-color: #0f493b;
     color: #fff;
     padding: 60px 0 30px;
 }
@@ -564,4 +564,39 @@ section {
     .hero h4 { font-size: 18px; }
     .section-title { font-size: 26px; }
     .number { font-size: 48px; }
+}
+
+/* Навигация в футере */
+.footer-nav {
+    min-width: 180px;
+}
+
+.footer-nav h4 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #ffffff !important;  /* белый цвет */
+}
+
+.footer-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-nav-list li {
+    margin-bottom: 12px;
+}
+
+.footer-nav-list li a {
+    color: #ffffff !important;  /* белый цвет для ссылок */
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-size: 15px;
+    opacity: 0.9;
+}
+
+.footer-nav-list li a:hover {
+    color: #249b52 !important;  /* оранжевый при наведении */
+    opacity: 1;
+    padding-left: 5px;
 }

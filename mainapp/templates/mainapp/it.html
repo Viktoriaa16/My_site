@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}IT технологии | ДОНГИС{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'mainapp/css/it.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="it-hero">
+    <div class="container">
+        <h1>IT технологии</h1>
+        <p>Цифровые решения для проектирования и инженерных изысканий</p>
+    </div>
+</section>
+
+<div class="it-menu">
+    <button class="it-btn active" data-it="bim">Технологии информационного моделирования</button>
+    <button class="it-btn" data-it="scan">Лазерное сканирование местности и объектов капитального строительства</button>
+</div>
+
+<div class="it-content" id="itContent">
+    <!-- Контент будет загружаться через JS -->
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'mainapp/js/it.js' %}"></script>
+{% endblock %}

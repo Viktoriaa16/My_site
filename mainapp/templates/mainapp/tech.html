@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Техническое оснащение | ДОНГИС{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'mainapp/css/tech.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="tech-hero">
+    <div class="container">
+        <h1>Техническое оснащение</h1>
+        <p>Современное оборудование для инженерных изысканий</p>
+    </div>
+</section>
+
+<div class="tech-menu">
+    <button class="tech-btn active" data-tech="geodesy">Инженерно-геодезические изыскания</button>
+    <button class="tech-btn" data-tech="drilling">Буровые установки</button>
+    <button class="tech-btn" data-tech="geology">Инженерно-геологические изыскания</button>
+    <button class="tech-btn" data-tech="auxiliary">Вспомогательная техника</button>
+    <button class="tech-btn" data-tech="remote">Дистанционное зондирование</button>
+    <button class="tech-btn" data-tech="monitoring">Геотехнический мониторинг</button>
+    <button class="tech-btn" data-tech="ecology">Инженерно-экологические и гидрологические изыскания</button>
+</div>
+
+<div class="tech-content" id="techContent">
+    <!-- Контент будет загружаться через JS -->
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'mainapp/js/tech.js' %}"></script>
+{% endblock %}

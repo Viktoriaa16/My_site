@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Контакты | ДОНГИС{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'mainapp/css/contacts.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="contacts-hero">
+    <div class="container">
+        <h1>Контакты</h1>
+        <p>Свяжитесь с нами любым удобным способом</p>
+    </div>
+</section>
+
+<div class="contacts-container">
+    <div class="contacts-grid">
+        <!-- Основной офис -->
+        <div class="contact-card">
+            <h2>Офис в Ростове-на-Дону</h2>
+            <div class="contact-details">
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="contact-text">
+                        <div class="contact-label">Телефон</div>
+                        <p>+7 (863) 322-02-82</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-text">
+                        <div class="contact-label">Email</div>
+                        <p><a href="mailto:ofman@don-gis.ru">ofman@don-gis.ru</a></p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="contact-text">
+                        <div class="contact-label">Адрес</div>
+                        <p>Россия, 344082, г. Ростов-на-Дону,<br>пер. Братский 48/19, оф. 3,4.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- По вопросам трудоустройства -->
+        <div class="contact-card">
+            <h2>По вопросам трудоустройства</h2>
+            <div class="contact-details">
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="contact-text">
+                        <div class="person-name">Чертопалова Ольга Сергеевна</div>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="contact-text">
+                        <div class="contact-label">Телефон</div>
+                        <p>+7 (863) 322-02-82 доб. 191<br>+7 (928) 127-14-83</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-text">
+                        <div class="contact-label">Email</div>
+                        <p><a href="mailto:o.chertopalova@don-gis.ru">o.chertopalova@don-gis.ru</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'mainapp/js/contacts.js' %}"></script>
+{% endblock %}
