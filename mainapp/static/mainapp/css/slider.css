@@ -1,5 +1,5 @@
-/* Стили для интерактивного слайдера с левым меню */
-.service-slider {
+/* Центральный слайдер */
+.main-slider {
     position: relative;
     width: 100%;
     height: 100vh;
@@ -8,7 +8,7 @@
     margin-top: 70px;
 }
 
-.service-slider-bg {
+.main-slider-bg {
     position: absolute;
     top: 0;
     left: 0;
@@ -19,169 +19,218 @@
     transition: background-image 0.5s ease-in-out;
 }
 
-.service-slider-overlay {
+.main-slider-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.65);
+    background: rgba(0, 0, 0, 0.5);
 }
 
-.service-slider-container {
+.main-slider-container {
     position: relative;
     z-index: 2;
     display: flex;
-    height: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 60px;
     align-items: center;
-    gap: 60px;
-}
-
-.service-menu {
-    width: 40%;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-}
-
-.service-menu-item {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding: 18px 25px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.service-menu-item:hover {
-    background: rgba(80, 80, 80, 0.85);
-    transform: translateX(8px);
-}
-
-.service-menu-item.active {
-    background: rgba(60, 60, 60, 0.9);
-    border-left: 4px solid #1b552d;
-}
-
-.service-number {
-    font-size: 28px;
-    font-weight: 700;
-    color: #ffffff;
-    min-width: 55px;
-}
-
-.service-name {
-    font-size: 17px;
-    font-weight: 500;
-    color: white;
-    line-height: 1.4;
-}
-
-.service-info {
-    width: 60%;
-    padding-left: 60px;
-    color: white;
-    display: flex;
-    flex-direction: column;
     justify-content: center;
-    align-items: center;
+    height: 100%;
+    padding: 20px;
+}
+
+/* Заблюренный квадрат по центру */
+.slider-card {
+    max-width: 700px;
+    width: 90%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 24px;
+    padding: 40px;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: fadeInUp 0.5s ease-out;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* По умолчанию (для слайдов с услугами) */
+.slider-card h2 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #fff;
+    border-left: 4px solid #134b2e;
+    padding-left: 15px;
+    text-align: left;
+}
+
+.slider-card p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    opacity: 0.9;
+    text-align: left;
+    font-weight: 500;
+}
+
+/* Для первого слайда (ДОНГИС) - выравнивание по центру */
+.slider-card.align-center h2 {
+    text-align: center;
+    border-left: none;
+    padding-left: 0;
+}
+
+.slider-card.align-center p {
     text-align: center;
 }
 
-.service-info h2 {
-    font-size: 48px;
-    font-weight: 700;
-    margin-bottom: 25px;
-    line-height: 1.2;
-    color: #ffffff;
-}
-
-.service-info p {
-    font-size: 18px;
-    line-height: 1.6;
-    margin-bottom: 25px;
-    opacity: 0.9;
-}
-
-.service-list {
+.slider-card ul {
     list-style: none;
     padding: 0;
-    margin: 0 0 25px 0;
+    margin: 0;
     text-align: left;
-    width: 100%;
 }
 
-.service-list li {
+.slider-card li {
     padding: 8px 0;
     padding-left: 20px;
     position: relative;
-    font-size: 16px;
+    font-size: 15px;
     opacity: 0.9;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.service-list li:last-child {
+.slider-card li:last-child {
     border-bottom: none;
 }
 
-.service-list li:before {
+.slider-card li:before {
     content: "▹";
     position: absolute;
     left: 0;
-    color: #16d252;
+    color: #134b2e;
 }
 
-.service-stats {
+/* Стрелки навигации */
+.slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
     display: flex;
-    gap: 50px;
-    margin-top: 20px;
+    align-items: center;
     justify-content: center;
+    color: white;
+    font-size: 20px;
 }
 
-.service-stat {
-    text-align: center;
+.slider-arrow:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-50%) scale(1.1);
 }
 
-.service-stat-number {
-    font-size: 32px;
-    font-weight: 700;
-    color: #1b552d;
+.slider-arrow.prev {
+    left: 30px;
 }
 
-.service-stat-label {
-    font-size: 13px;
-    opacity: 0.8;
-    margin-top: 5px;
+.slider-arrow.next {
+    right: 30px;
 }
 
-@media (max-width: 1024px) {
-    .service-slider-container {
-        flex-direction: column;
-        padding: 40px;
-        justify-content: center;
+/* Точки навигации */
+.slider-dots {
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    z-index: 10;
+}
+
+.slider-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.slider-dot:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: scale(1.2);
+}
+
+.slider-dot.active {
+    width: 30px;
+    border-radius: 5px;
+    background: #095131;
+}
+
+/* Анимация */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
     }
-    .service-menu, .service-info { width: 100%; }
-    .service-menu { margin-bottom: 40px; max-height: 45%; overflow-y: auto; }
-    .service-info { padding-left: 0; }
-    .service-info h2 { font-size: 36px; }
-    .service-list li { font-size: 14px; }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
+/* Адаптивность */
 @media (max-width: 768px) {
-    .service-slider { height: auto; min-height: 700px; margin-top: 60px; }
-    .service-menu-item { padding: 12px 18px; }
-    .service-number { font-size: 20px; min-width: 45px; }
-    .service-name { font-size: 13px; }
-    .service-info h2 { font-size: 28px; }
-    .service-info p { font-size: 14px; }
-    .service-list li { font-size: 12px; padding: 6px 0 6px 18px; }
-    .service-stats { flex-wrap: wrap; gap: 25px; }
-    .service-stat-number { font-size: 24px; }
+    .slider-card {
+        padding: 25px;
+    }
+    
+    .slider-card h2 {
+        font-size: 24px;
+    }
+    
+    .slider-card p {
+        font-size: 16px;
+    }
+    
+    .slider-card li {
+        font-size: 13px;
+        padding: 6px 0 6px 18px;
+    }
+    
+    .slider-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+    
+    .slider-arrow.prev {
+        left: 15px;
+    }
+    
+    .slider-arrow.next {
+        right: 15px;
+    }
+    
+    .slider-dots {
+        bottom: 20px;
+        gap: 8px;
+    }
+    
+    .slider-dot {
+        width: 8px;
+        height: 8px;
+    }
+    
+    .slider-dot.active {
+        width: 25px;
+    }
 }

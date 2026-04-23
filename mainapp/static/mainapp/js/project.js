@@ -55,6 +55,69 @@ function escapeHtml(str) {
     });
 }
 
+// Функция для создания модального окна
+function showModal(project) {
+    const modal = document.createElement('div');
+    modal.className = 'project-modal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-labelledby', 'modal-title');
+    
+    const imageUrl = '/static/mainapp/images/projects1/' + project.imageFile;
+    const yearHtml = project.year ? `<span class="modal-year">${escapeHtml(project.year)}</span>` : '';
+    
+    modal.innerHTML = `
+        <div class="project-modal-content">
+            <button class="project-modal-close" aria-label="Закрыть">&times;</button>
+            <div class="project-modal-image">
+                <img src="${imageUrl}" alt="${escapeHtml(project.title)}">
+            </div>
+            <div class="project-modal-info">
+                <h2 id="modal-title">${escapeHtml(project.title)}</h2>
+                <div class="modal-meta">
+                    <span class="modal-city">${escapeHtml(project.city)}</span>
+                    ${yearHtml}
+                    <span class="modal-type">${escapeHtml(project.workType)}</span>
+                </div>
+                <div class="modal-section">
+                    <h3>Состав работ</h3>
+                    <p>${escapeHtml(project.workList)}</p>
+                </div>
+                <div class="modal-section">
+                    <h3>Особенности проекта</h3>
+                    <p>${escapeHtml(project.attention)}</p>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+    
+    const closeBtn = modal.querySelector('.project-modal-close');
+    closeBtn.addEventListener('click', () => closeModal(modal));
+    
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal(modal);
+    });
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeModal(modal);
+    });
+    
+    setTimeout(() => {
+        modal.classList.add('active');
+    }, 10);
+}
+
+function closeModal(modal) {
+    modal.classList.remove('active');
+    setTimeout(() => {
+        modal.remove();
+        document.body.style.overflow = '';
+    }, 300);
+}
+
 function renderCards() {
     const container = document.getElementById('projectsContainer');
     if (!container) return;
@@ -65,27 +128,29 @@ function renderCards() {
         card.className = 'project-card';
         
         const imageUrl = '/static/mainapp/images/projects1/' + proj.imageFile;
-        const yearHtml = proj.year ? `<span class="year-badge"> ${escapeHtml(proj.year)}</span>` : '';
+        const yearHtml = proj.year ? `<span class="year-badge">${escapeHtml(proj.year)}</span>` : '';
         
         card.innerHTML = `
             <div class="card-inner">
                 <div class="card-image">
-                    <img src="${imageUrl}" alt="${escapeHtml(proj.title)}" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'image-fallback\'>🏗️</div>';">
+                    <img src="${imageUrl}" alt="${escapeHtml(proj.title)}">
                 </div>
                 <div class="card-content">
                     <div class="project-title">${escapeHtml(proj.title)}</div>
                     <div class="project-meta">
-                        <span class="city-badge"> ${escapeHtml(proj.city)}</span>
+                        <span class="city-badge">${escapeHtml(proj.city)}</span>
                         <span class="work-type">${escapeHtml(proj.workType)}</span>
                         ${yearHtml}
                     </div>
-                    <div class="section-label"> СОСТАВ РАБОТ</div>
+                    <div class="section-label">СОСТАВ РАБОТ</div>
                     <div class="work-list">${escapeHtml(proj.workList)}</div>
-                    <div class="section-label"> ОСОБЕННОСТИ</div>
+                    <div class="section-label">ОСОБЕННОСТИ</div>
                     <div class="attention-text">${escapeHtml(proj.attention)}</div>
                 </div>
             </div>
         `;
+        
+        card.addEventListener('click', () => showModal(proj));
         container.appendChild(card);
     });
 }

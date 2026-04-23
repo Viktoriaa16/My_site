@@ -8,56 +8,39 @@
 {% endblock %}
 
 {% block content %}
-    <!-- ИНТЕРАКТИВНЫЙ СЛАЙДЕР -->
-    <div class="service-slider">
-        <div class="service-slider-bg" id="serviceSliderBg" style="background-image: url('{% static 'mainapp/images/bgsl1.png' %}');">
-            <div class="service-slider-overlay"></div>
+       <!-- ЦЕНТРАЛЬНЫЙ СЛАЙДЕР С АВТОПЕРЕКЛЮЧЕНИЕМ -->
+    <div class="main-slider">
+        <div class="main-slider-bg" id="mainSliderBg" style="background-image: url('{% static 'mainapp/images/bgsl1.png' %}');">
+            <div class="main-slider-overlay"></div>
             
-            <div class="service-slider-container">
-                <div class="service-menu">
-                    <div class="service-menu-item active" data-service="1" data-bg="cadastral_bg.png">
-                        <span class="service-number">01</span>
-                        <span class="service-name">Кадастровые работы</span>
-                    </div>
-                    <div class="service-menu-item" data-service="2" data-bg="engineering_bg.png">
-                        <span class="service-number">02</span>
-                        <span class="service-name">Инженерные изыскания</span>
-                    </div>
-                    <div class="service-menu-item" data-service="3" data-bg="projection_bg.png">
-                        <span class="service-number">03</span>
-                        <span class="service-name">Проектирование</span>
-                    </div>
-                    <div class="service-menu-item" data-service="4" data-bg="buling_bg.png">
-                        <span class="service-number">04</span>
-                        <span class="service-name">Строительство</span>
-                    </div>
-                    <div class="service-menu-item" data-service="5" data-bg="GEOmon_bg.png">
-                        <span class="service-number">05</span>
-                        <span class="service-name">Геотехнический мониторинг</span>
-                    </div>
+            <div class="main-slider-container">
+                <div class="slider-card" id="sliderCard">
+                    <h2 id="sliderTitle">ДОНГИС</h2>
+                    <p id="sliderDescription">Воплощаем уникальные проекты, развивая будущее страны</p>
+                    <ul id="sliderList" style="display: none;"></ul>
                 </div>
-                
-                <div class="service-info" id="serviceInfo">
-                    <h2>ДОНГИС</h2>
-                    <p>Воплощаем уникальные проекты, развивая будущее страны</p>
-                    <div class="service-stats">
-                        <div class="service-stat">
-                            <div class="service-stat-number">{{ stats.years_experience }}</div>
-                            <div class="service-stat-label">лет на рынке</div>
-                        </div>
-                        <div class="service-stat">
-                            <div class="service-stat-number">{{ stats.projects_completed }}+</div>
-                            <div class="service-stat-label">реализованных проектов</div>
-                        </div>
-                        <div class="service-stat">
-                            <div class="service-stat-number">{{ stats.employees_count }}</div>
-                            <div class="service-stat-label">специалистов</div>
-                        </div>
-                    </div>
-                </div>
+            </div>
+            
+            <!-- Стрелки навигации -->
+            <button class="slider-arrow prev" id="prevSlide" aria-label="Предыдущий слайд">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="slider-arrow next" id="nextSlide" aria-label="Следующий слайд">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            
+            <!-- Точки навигации -->
+            <div class="slider-dots" id="sliderDots">
+                <div class="slider-dot active" data-slide="0"></div>
+                <div class="slider-dot" data-slide="1"></div>
+                <div class="slider-dot" data-slide="2"></div>
+                <div class="slider-dot" data-slide="3"></div>
+                <div class="slider-dot" data-slide="4"></div>
+                <div class="slider-dot" data-slide="5"></div>
             </div>
         </div>
     </div>
+
 
     <!-- Главный баннер -->
     <section class="hero">
@@ -89,8 +72,8 @@
                     <div class="number-label">лет успешной работы</div>
                 </div>
                 <div class="number-card">
-                    <div class="number" data-count="{{ projects_count }}">0</div>
-                    <div class="number-label">ключевых объектов на карте</div>
+                    <div class="number" data-count="{{ stats.projects_completed }}">0</div>
+                    <div class="number-label">реализованных проектов</div>
                 </div>
                 <div class="number-card">
                     <div class="number" data-count="{{ stats.employees_count }}">0</div>
@@ -110,7 +93,232 @@
                 <div id="yandex-map"></div>
             </div>
             
-            <div class="project-count">Всего проектов на карте: <span id="total-projects">{{ projects_count }}</span></div>
+            <div class="project-count">Всего проектов на карте: <span id="total-projects">{{ stats.projects_completed }}</span></div>
+            
+            <!-- Список проектов для мобильных устройств -->
+            <div class="mobile-projects-list">
+                <h3><i class="fas fa-list"></i> Все проекты (44):</h3>
+                <div class="mobile-project-item">
+                    <h4>1. Мурманский порт</h4>
+                    <p>Создание специализированного комплекса по перевалке бункерного топлива</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Мурманск, грузовой район № 2</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>2. Каток с искусственным льдом</h4>
+                    <p>Крытый каток в Ямало-Ненецком АО</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Салехард</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>3. Шлюзы Волго-Балтийского канала</h4>
+                    <p>Шлюзы 2,3,4 - 2020 г.</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Вологодская область, п. Белоусово</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>4. Реконструкция здания ФСБ</h4>
+                    <p>Служебно-техническое здание</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Москва</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>5. Газификация улицы Намцырской</h4>
+                    <p>Микрорайон Махр - 2021 г.</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Якутск, Республика Саха</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>6. Морской порт Эльга</h4>
+                    <p>Новый специализированный порт - 2021 г.</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Хабаровский край, мыс Носорог</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>7. Причальный комплекс</h4>
+                    <p>Строительство причального комплекса</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Северо-Курильск, Сахалинская область</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>8. Парковая зона</h4>
+                    <p>Строительство парковой зоны за висящим мостом</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Анива, о. Сахалин</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>9. Красноярская ГРЭС-2</h4>
+                    <p>Электростанция</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Красноярский край</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>10. Хоккейный корт на Шикотане</h4>
+                    <p>Реконструкция с строительством здания АБК - 2020 г.</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> о. Шикотан, с. Крабозаводское</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>11. Газопровод Север-Юг</h4>
+                    <p>Строительство магистрального газопровода (I этап)</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Кыргызская республика, Джалал-Абадская область</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>12. Реконструкция ЕСГ</h4>
+                    <p>Северо-западный регион - 2021 г.</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Республика Калмыкия, с. Улан-Хол</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>13. Дноуглубительные работы в Таганроге</h4>
+                    <p>Таганрогский подходной канал</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Таганрог, акватория Таганрогского залива</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>14. ТЭС «Восточная Гавана» (Куба)</h4>
+                    <p>Размещение площадки строительства проектируемой ТЭС</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> в 47 км к востоку от Гаваны</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>15. Севастопольская ПГУ-ТЭС</h4>
+                    <p>Строительство электростанции</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Севастополь, Балаклавский район</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>16. Симферопольская ПГУ-ТЭС</h4>
+                    <p>Строительство электростанции</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Симферополь, с. Строгановка</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>17. Геотехнический мониторинг в Ростове</h4>
+                    <p>Мониторинг уровня грунтовых вод</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Ростов-на-Дону, район «Левенцовский»</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>18. Завод барьерной пленки</h4>
+                    <p>Завод для пищевой упаковки</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Батайск, Ростовская область</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>19. Багаевский гидроузел на р. Дон</h4>
+                    <p>Строительство гидроузла</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Ростовская область, х. Арпачин</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>20. Аэропорт «Платов»</h4>
+                    <p>Строительство аэропорта</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Ростов-на-Дону</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>21. Каменско-Красносулинская ВЭС</h4>
+                    <p>Ветряная электростанция</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Ростовская область</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>22. Реконструкция ГРС «Семикаракорск»</h4>
+                    <p>Газораспределительная станция</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Семикаракорский район</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>23. Марченковская ВЭС</h4>
+                    <p>Ветряная электростанция</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Зимовниковский район</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>24. Марченковская ВЭС - автодороги</h4>
+                    <p>Проектирование автодорог</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Зимовниковский район</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>25. Красинская СЭС 60 МВт</h4>
+                    <p>Солнечная электростанция</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Республика Калмыкия</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>26. Кти-Тебердинский вольфрамовый комбинат</h4>
+                    <p>Горнодобывающее предприятие</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Карачаево-Черкесия</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>27. Реконструкция ДШИ в Батырево</h4>
+                    <p>Реконструкция школы искусств</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> с. Батырево, Чувашия</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>28. Абаканская ТЭЦ</h4>
+                    <p>Теплоэлектроцентраль</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Республика Хакасия</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>29. Автомобильная дорога в Красноярске</h4>
+                    <p>Строительство автодороги</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Красноярск</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>30. Расширение ЕСГ для «Южного потока»</h4>
+                    <p>Газотранспортная система</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Магадан, п. Сокол</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>31. Спецприемник в Тымовске</h4>
+                    <p>Строительство спецприемника</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Тымовск, Сахалин</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>32. Конвейерная галерея для угля</h4>
+                    <p>Транспортная система для угля</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Углегорский район, Сахалин</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>33. Транспортно-логистическая база</h4>
+                    <p>Логистический комплекс</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Южно-Сахалинск</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>34. Офисный комплекс в Южно-Сахалинске</h4>
+                    <p>Строительство офисного здания</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Южно-Сахалинск</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>35. Капитальный ремонт тепловой сети</h4>
+                    <p>Ремонт тепловых сетей</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Анива, Сахалин</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>36. Геология и геодезия в Таганроге</h4>
+                    <p>Инженерные изыскания для порта</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Таганрог, Таганрогский залив</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>37. Детский сад на острове Шикотан</h4>
+                    <p>Дошкольное образовательное учреждение - 2023 г.</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> о. Шикотан, с. Крабозаводское</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>38. Комплекс зданий ОМВД России</h4>
+                    <p>Административное здание и ИВС - 2020 г.</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Северо-Курильск, Сахалинская область</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>39. Капитальный ремонт школы искусств им. Елены Образцовой</h4>
+                    <p>Реконструкция школы - 2021 г.</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Салехард, ЯНАО</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>40. Реконструкция среднеобразовательной школы №2</h4>
+                    <p>Строительство дополнительного корпуса - 2020 г.</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Салехард, ЯНАО</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>41. Подготовка проектных решений для прокладки сети водопровода</h4>
+                    <p>Развитие централизованной системы водоснабжения</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> село Песчанское</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>42. Проектная документация для реконструкции инженерной инфраструктуры</h4>
+                    <p>Водоснабжение жилых домов для многодетных семей - 2021 г.</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> г. Саратов</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>43. Реконструкция Батыревской детской школы искусств</h4>
+                    <p>Комплексное обследование оснований конструкций - 2021 г.</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> с. Батырево, Чувашия</p>
+                </div>
+                <div class="mobile-project-item">
+                    <h4>44. Абаканская ТЭЦ</h4>
+                    <p>Наблюдение за осадками и деформациями фундамента</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Республика Хакасия</p>
+                </div>
+            </div>
         </div>
     </section>
 {% endblock %}

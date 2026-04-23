@@ -1,31 +1,32 @@
 from django.contrib import admin
-from django.contrib import messages
-from .models import ContactInfo, SiteStatistics
+from .models import ContactInfo, SiteStatistics, AboutInfo
+
 
 @admin.register(ContactInfo)
 class ContactInfoAdmin(admin.ModelAdmin):
+    list_display = ['id', 'phone', 'email', 'sakhalin_phone']
     fieldsets = (
-        ('Основные контакты', {
-            'fields': ('phone', 'email', 'address', 'working_hours', 'map_link')
+        ('Офис в Ростове-на-Дону', {
+            'fields': ('phone', 'email', 'address')
         }),
-        ('Социальные сети', {
-            'fields': ('vk_link', 'telegram_link'),
-            'classes': ('wide',)
+        ('Офис в Южно-Сахалинске', {
+            'fields': ('sakhalin_phone', 'sakhalin_address'),
+            'description': 'Контактные данные для офиса в Южно-Сахалинске'
         }),
     )
     
     def has_add_permission(self, request):
-        # Запрещаем добавлять новые записи, если уже есть
         if ContactInfo.objects.exists():
             return False
         return super().has_add_permission(request)
     
     def has_delete_permission(self, request, obj=None):
-        # Запрещаем удалять единственную запись
         return False
+
 
 @admin.register(SiteStatistics)
 class SiteStatisticsAdmin(admin.ModelAdmin):
+    list_display = ['id', 'years_experience', 'projects_completed', 'federal_projects', 'employees_count']
     fieldsets = (
         ('Статистика компании', {
             'fields': ('years_experience', 'projects_completed', 'federal_projects', 'employees_count', 'regions_count'),
@@ -34,11 +35,28 @@ class SiteStatisticsAdmin(admin.ModelAdmin):
     )
     
     def has_add_permission(self, request):
-        # Запрещаем добавлять новые записи, если уже есть
         if SiteStatistics.objects.exists():
             return False
         return super().has_add_permission(request)
     
     def has_delete_permission(self, request, obj=None):
-        # Запрещаем удалять единственную запись
+        return False
+
+
+@admin.register(AboutInfo)
+class AboutInfoAdmin(admin.ModelAdmin):
+    list_display = ['id', 'title']
+    fieldsets = (
+        ('О компании', {
+            'fields': ('title', 'text'),
+            'description': 'Текст, отображаемый в разделе "О компании" на главной странице'
+        }),
+    )
+    
+    def has_add_permission(self, request):
+        if AboutInfo.objects.exists():
+            return False
+        return super().has_add_permission(request)
+    
+    def has_delete_permission(self, request, obj=None):
         return False

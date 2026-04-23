@@ -143,8 +143,8 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
 # Данные от почты, С КОТОРОЙ будут отправляться уведомления
-EMAIL_HOST_USER = 'viktoria.polkina006@gmail.com'  # Например: don-gis@yandex.ru
-EMAIL_HOST_PASSWORD = 'yxputhaakyovqdqa'  # Пароль приложения!
+EMAIL_HOST_USER = 'don.gis.bot.tech@gmail.com'  # Например: don-gis@yandex.ru
+EMAIL_HOST_PASSWORD = 'eitlmpxlrancuzjt'  # Пароль приложения!
 
 # Адресаты
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

@@ -94,18 +94,35 @@ function setCurrentYear() {
 }
 
 // Функции валидации
+function validateName(name) {
+    return name && name.trim().length >= 2;
+}
+
 function validatePhone(phone) {
     const phoneRegex = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/;
     return phoneRegex.test(phone);
 }
 
-function validateSubject(subject) {
-    return subject && subject.trim() !== '';
+function validateTopic(topic, customTopic) {
+    if (!topic || topic === '') return false;
+    if (topic === 'other') {
+        return customTopic && customTopic.trim().length >= 2;
+    }
+    return true;
 }
 
-function showFieldError(fieldId, hasError) {
+function validateMessage(message) {
+    return message && message.trim().length >= 10;
+}
+
+function validateConsent(consent) {
+    return consent === true;
+}
+
+// Показывать ошибку только если поле было тронуто
+function showFieldError(fieldId, hasError, wasTouched) {
     const fieldGroup = document.getElementById(fieldId);
-    if (fieldGroup) {
+    if (fieldGroup && wasTouched) {
         if (hasError) {
             fieldGroup.classList.add('error');
             fieldGroup.classList.remove('success');
@@ -113,35 +130,115 @@ function showFieldError(fieldId, hasError) {
             fieldGroup.classList.remove('error');
             fieldGroup.classList.add('success');
         }
+    } else if (fieldGroup && !wasTouched) {
+        fieldGroup.classList.remove('error', 'success');
     }
 }
 
 function clearValidationStyles() {
-    const phoneGroup = document.getElementById('phoneGroup');
-    const subjectGroup = document.getElementById('subjectGroup');
-    
-    if (phoneGroup) phoneGroup.classList.remove('error', 'success');
-    if (subjectGroup) subjectGroup.classList.remove('error', 'success');
+    const fields = ['nameGroup', 'phoneGroup', 'topicGroup', 'customTopicGroup', 'messageGroup', 'consentGroup'];
+    fields.forEach(fieldId => {
+        const fieldGroup = document.getElementById(fieldId);
+        if (fieldGroup) {
+            fieldGroup.classList.remove('error', 'success');
+        }
+    });
 }
 
-// Обработка формы заявки
+// Хранилище состояния touched полей
+const touchedFields = {
+    name: false,
+    phone: false,
+    topic: false,
+    customTopic: false,
+    message: false,
+    consent: false
+};
+
+function markFieldTouched(fieldName) {
+    touchedFields[fieldName] = true;
+}
+
+function resetTouchedFields() {
+    for (let key in touchedFields) {
+        touchedFields[key] = false;
+    }
+}
+
+function validateForm() {
+    const name = document.getElementById('name')?.value || '';
+    const phone = document.getElementById('phone')?.value || '';
+    const topic = document.getElementById('topic')?.value || '';
+    const customTopic = document.getElementById('custom_topic')?.value || '';
+    const message = document.getElementById('message')?.value || '';
+    const consent = document.getElementById('consent')?.checked || false;
+    
+    const isNameValid = validateName(name);
+    const isPhoneValid = validatePhone(phone);
+    const isTopicValid = validateTopic(topic, customTopic);
+    const isMessageValid = validateMessage(message);
+    const isConsentValid = validateConsent(consent);
+    
+    showFieldError('nameGroup', !isNameValid, touchedFields.name);
+    showFieldError('phoneGroup', !isPhoneValid, touchedFields.phone);
+    showFieldError('topicGroup', !isTopicValid, touchedFields.topic);
+    showFieldError('messageGroup', !isMessageValid, touchedFields.message);
+    showFieldError('consentGroup', !isConsentValid, touchedFields.consent);
+    
+    if (topic === 'other') {
+        showFieldError('customTopicGroup', !(customTopic && customTopic.trim().length >= 2), touchedFields.customTopic);
+    } else {
+        const customGroup = document.getElementById('customTopicGroup');
+        if (customGroup) {
+            customGroup.classList.remove('error', 'success');
+        }
+    }
+    
+    return isNameValid && isPhoneValid && isTopicValid && isMessageValid && isConsentValid;
+}
+
+function updateSubmitButton() {
+    const submitBtn = document.getElementById('submitBtn');
+    if (submitBtn) {
+        const isValid = validateForm();
+        submitBtn.disabled = !isValid;
+    }
+}
+
+// Инициализация формы заявки
 function initRequestForm() {
+    console.log('Инициализация формы заявки...');
+    
     const requestBtn = document.getElementById('requestBtn');
     const modalOverlay = document.getElementById('modalOverlay');
     const modalClose = document.getElementById('modalClose');
     const btnBack = document.getElementById('btnBack');
     const requestForm = document.getElementById('requestForm');
-    const phoneInput = document.getElementById('phone');
-    const subjectInput = document.getElementById('subject');
+    const topicSelect = document.getElementById('topic');
+    const customTopicGroup = document.getElementById('customTopicGroup');
+    const customTopicInput = document.getElementById('custom_topic');
     
-    if (!requestBtn || !modalOverlay) return;
+    if (!requestBtn) {
+        console.error('Кнопка заявки не найдена!');
+        return;
+    }
+    
+    if (!modalOverlay) {
+        console.error('Модальное окно не найдено!');
+        return;
+    }
     
     // Открытие модального окна
-    requestBtn.addEventListener('click', () => {
+    requestBtn.addEventListener('click', function(e) {
+        console.log('Кнопка заявки нажата');
         modalOverlay.classList.add('active');
         document.body.style.overflow = 'hidden';
         clearValidationStyles();
+        resetTouchedFields();
         if (requestForm) requestForm.reset();
+        if (customTopicGroup) customTopicGroup.style.display = 'none';
+        if (topicSelect) topicSelect.value = '';
+        updateSubmitButton();
     });
     
     // Закрытие модального окна
@@ -149,50 +246,120 @@ function initRequestForm() {
         modalOverlay.classList.remove('active');
         document.body.style.overflow = '';
         clearValidationStyles();
+        resetTouchedFields();
     }
     
-    if (modalClose) modalClose.addEventListener('click', closeModal);
-    if (btnBack) btnBack.addEventListener('click', closeModal);
+    if (modalClose) {
+        modalClose.addEventListener('click', closeModal);
+    }
     
-    modalOverlay.addEventListener('click', (e) => {
+    if (btnBack) {
+        btnBack.addEventListener('click', closeModal);
+    }
+    
+    modalOverlay.addEventListener('click', function(e) {
         if (e.target === modalOverlay) closeModal();
     });
     
-    // Маска для телефона
-    if (phoneInput) {
-        phoneInput.addEventListener('input', function(e) {
-            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-            let formattedValue = '';
-            
-            if (!x[2]) {
-                formattedValue = x[1];
+    // Показ/скрытие поля "Свой вариант"
+    if (topicSelect) {
+        topicSelect.addEventListener('change', function() {
+            markFieldTouched('topic');
+            if (this.value === 'other') {
+                customTopicGroup.style.display = 'block';
+                if (customTopicInput) customTopicInput.required = true;
             } else {
-                formattedValue = '+7 (' + x[2];
-                if (x[3]) formattedValue += ') ' + x[3];
-                if (x[4]) formattedValue += '-' + x[4];
-                if (x[5]) formattedValue += '-' + x[5];
+                customTopicGroup.style.display = 'none';
+                if (customTopicInput) {
+                    customTopicInput.required = false;
+                    customTopicInput.value = '';
+                }
+                touchedFields.customTopic = false;
+                const customGroup = document.getElementById('customTopicGroup');
+                if (customGroup) {
+                    customGroup.classList.remove('error', 'success');
+                }
             }
-            
-            e.target.value = formattedValue;
-            
-            const phoneGroup = document.getElementById('phoneGroup');
-            if (phoneGroup) phoneGroup.classList.remove('error');
+            updateSubmitButton();
         });
     }
     
-    // Валидация темы обращения в реальном времени
-    if (subjectInput) {
-        subjectInput.addEventListener('input', function() {
-            const subjectGroup = document.getElementById('subjectGroup');
-            if (subjectGroup) {
-                if (this.value.trim() !== '') {
-                    subjectGroup.classList.remove('error');
-                    subjectGroup.classList.add('success');
-                } else {
-                    subjectGroup.classList.remove('success');
-                    subjectGroup.classList.add('error');
+    // Маска для телефона
+    const phoneInput = document.getElementById('phone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            markFieldTouched('phone');
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
+            
+            let formattedValue = '';
+            if (value.length > 0) {
+                formattedValue = '+7';
+                if (value.length > 1) {
+                    formattedValue += ' (' + value.slice(1, 4);
+                    if (value.length > 4) {
+                        formattedValue += ') ' + value.slice(4, 7);
+                        if (value.length > 7) {
+                            formattedValue += '-' + value.slice(7, 9);
+                            if (value.length > 9) {
+                                formattedValue += '-' + value.slice(9, 11);
+                            }
+                        }
+                    }
                 }
             }
+            e.target.value = formattedValue;
+            updateSubmitButton();
+        });
+        
+        phoneInput.addEventListener('blur', function() {
+            markFieldTouched('phone');
+            updateSubmitButton();
+        });
+    }
+    
+    // Обработчики для всех полей ввода
+    const nameInput = document.getElementById('name');
+    const messageInput = document.getElementById('message');
+    const consentCheckbox = document.getElementById('consent');
+    
+    if (nameInput) {
+        nameInput.addEventListener('input', function() {
+            markFieldTouched('name');
+            updateSubmitButton();
+        });
+        nameInput.addEventListener('blur', function() {
+            markFieldTouched('name');
+            updateSubmitButton();
+        });
+    }
+    
+    if (messageInput) {
+        messageInput.addEventListener('input', function() {
+            markFieldTouched('message');
+            updateSubmitButton();
+        });
+        messageInput.addEventListener('blur', function() {
+            markFieldTouched('message');
+            updateSubmitButton();
+        });
+    }
+    
+    if (customTopicInput) {
+        customTopicInput.addEventListener('input', function() {
+            markFieldTouched('customTopic');
+            updateSubmitButton();
+        });
+        customTopicInput.addEventListener('blur', function() {
+            markFieldTouched('customTopic');
+            updateSubmitButton();
+        });
+    }
+    
+    if (consentCheckbox) {
+        consentCheckbox.addEventListener('change', function() {
+            markFieldTouched('consent');
+            updateSubmitButton();
         });
     }
     
@@ -200,38 +367,42 @@ function initRequestForm() {
     if (requestForm) {
         requestForm.addEventListener('submit', async function(e) {
             e.preventDefault();
+            console.log('Форма отправляется...');
             
-            const phone = phoneInput ? phoneInput.value.trim() : '';
-            const subject = subjectInput ? subjectInput.value.trim() : '';
+            for (let key in touchedFields) {
+                touchedFields[key] = true;
+            }
             
-            const isPhoneValid = validatePhone(phone);
-            const isSubjectValid = validateSubject(subject);
-            
-            showFieldError('phoneGroup', !isPhoneValid);
-            showFieldError('subjectGroup', !isSubjectValid);
-            
-            // Одно сообщение об ошибке
-            if (!isPhoneValid || !isSubjectValid) {
-                let errorMessage = '';
-                if (!isPhoneValid && !isSubjectValid) {
-                    errorMessage = 'Пожалуйста, заполните все поля корректно:\n- Номер телефона должен быть в формате +7 (XXX) XXX-XX-XX\n- Введите тему обращения';
-                } else if (!isPhoneValid) {
-                    errorMessage = 'Пожалуйста, введите корректный номер телефона в формате +7 (XXX) XXX-XX-XX';
-                } else if (!isSubjectValid) {
-                    errorMessage = 'Пожалуйста, введите тему обращения';
-                }
-                alert(errorMessage);
+            if (!validateForm()) {
+                alert('Пожалуйста, заполните все поля корректно и дайте согласие на обработку персональных данных.');
                 return;
             }
             
-            // Отключаем кнопку
-            const submitBtn = requestForm.querySelector('.btn-submit');
+            const name = document.getElementById('name')?.value || '';
+            const phone = document.getElementById('phone')?.value || '';
+            let topic = document.getElementById('topic')?.value || '';
+            const customTopic = document.getElementById('custom_topic')?.value || '';
+            const message = document.getElementById('message')?.value || '';
+            const consent = document.getElementById('consent')?.checked || false;
+            
+            if (topic === 'other') {
+                topic = customTopic;
+            }
+            
+            const submitBtn = document.getElementById('submitBtn');
             const originalText = submitBtn.textContent;
             submitBtn.disabled = true;
             submitBtn.textContent = 'Отправка...';
             
             try {
-                const formData = new FormData(requestForm);
+                const formData = new FormData();
+                formData.append('name', name);
+                formData.append('phone', phone);
+                formData.append('topic', topic);
+                formData.append('message', message);
+                formData.append('consent', consent);
+                formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+                
                 const response = await fetch(requestForm.action, {
                     method: 'POST',
                     body: formData,
@@ -241,29 +412,36 @@ function initRequestForm() {
                 });
                 
                 const result = await response.json();
+                console.log('Ответ:', result);
                 
                 if (result.success) {
                     alert(' Спасибо! Ваша заявка принята. Наш менеджер свяжется с вами.');
                     closeModal();
                     requestForm.reset();
                     clearValidationStyles();
+                    resetTouchedFields();
+                    if (customTopicGroup) customTopicGroup.style.display = 'none';
+                    if (topicSelect) topicSelect.value = '';
                 } else {
-                    // Одно сообщение об ошибке
                     alert(' ' + (result.message || 'Произошла ошибка. Попробуйте позже.'));
                 }
             } catch (error) {
                 console.error('Ошибка:', error);
-                alert(' Ошибка сети. Попробуйте позже.');
+                alert(' Ошибка сети. Пожалуйста, проверьте подключение.');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalText;
+                updateSubmitButton();
             }
         });
     }
+    
+    console.log('Инициализация завершена');
 }
 
 // Инициализация при загрузке страницы
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM загружен');
     animateNumbers();
     initMobileMenu();
     initSmoothScroll();

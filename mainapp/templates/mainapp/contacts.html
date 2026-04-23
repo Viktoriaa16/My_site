@@ -17,35 +17,65 @@
 
 <div class="contacts-container">
     <div class="contacts-grid">
-        <!-- Основной офис -->
+        <!-- Офисы в Ростове-на-Дону и Южно-Сахалинске -->
         <div class="contact-card">
-            <h2>Офис в Ростове-на-Дону</h2>
-            <div class="contact-details">
-                <div class="contact-item">
-                    <div class="contact-icon">
-                        <i class="fas fa-phone"></i>
+            <h2>Офис в Ростове-на-Дону и Южно-Сахалинске</h2>
+            
+            <!-- Ростов-на-Дону -->
+            <div class="office-section">
+                <h3 class="office-title">Ростов-на-Дону</h3>
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-text">
+                            <div class="contact-label">Телефон</div>
+                            <p>{{ contacts.phone }}</p>
+                        </div>
                     </div>
-                    <div class="contact-text">
-                        <div class="contact-label">Телефон</div>
-                        <p>+7 (863) 322-02-82</p>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-text">
+                            <div class="contact-label">Email</div>
+                            <p><a href="mailto:{{ contacts.email }}">{{ contacts.email }}</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-text">
+                            <div class="contact-label">Адрес</div>
+                            <p>{{ contacts.address }}</p>
+                        </div>
                     </div>
                 </div>
-                <div class="contact-item">
-                    <div class="contact-icon">
-                        <i class="fas fa-envelope"></i>
+            </div>
+            
+            <!-- Южно-Сахалинск -->
+            <div class="office-section">
+                <h3 class="office-title">Южно-Сахалинск</h3>
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-text">
+                            <div class="contact-label">Телефон</div>
+                            <p>{{ contacts.sakhalin_phone|default:"+7 (4242) 43-63-08" }}</p>
+                        </div>
                     </div>
-                    <div class="contact-text">
-                        <div class="contact-label">Email</div>
-                        <p><a href="mailto:ofman@don-gis.ru">ofman@don-gis.ru</a></p>
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-icon">
-                        <i class="fas fa-map-marker-alt"></i>
-                    </div>
-                    <div class="contact-text">
-                        <div class="contact-label">Адрес</div>
-                        <p>Россия, 344082, г. Ростов-на-Дону,<br>пер. Братский 48/19, оф. 3,4.</p>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-text">
+                            <div class="contact-label">Адрес</div>
+                            <p>{{ contacts.sakhalin_address|default:"г. Южно-Сахалинск, ул. Пограничная, 79" }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
