@@ -82,7 +82,7 @@ const slidesData = [
 
 let currentSlide = 0;
 let autoSlideInterval;
-const slideDuration = 4000;
+const slideDuration = 4000; 
 
 const sliderBg = document.getElementById('mainSliderBg');
 const sliderCard = document.getElementById('sliderCard');
