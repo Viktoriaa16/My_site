@@ -1,5 +1,10 @@
 from django.contrib import admin
+from django.contrib.auth.models import User, Group
 from .models import ContactInfo, SiteStatistics, AboutInfo
+
+# Скрываем стандартные модели пользователей и групп из админ-панели
+admin.site.unregister(User)
+admin.site.unregister(Group)
 
 
 @admin.register(ContactInfo)
@@ -26,10 +31,10 @@ class ContactInfoAdmin(admin.ModelAdmin):
 
 @admin.register(SiteStatistics)
 class SiteStatisticsAdmin(admin.ModelAdmin):
-    list_display = ['id', 'years_experience', 'projects_completed', 'federal_projects', 'employees_count']
+    list_display = ['id', 'years_experience', 'projects_completed', 'employees_count']
     fieldsets = (
         ('Статистика компании', {
-            'fields': ('years_experience', 'projects_completed', 'federal_projects', 'employees_count', 'regions_count'),
+            'fields': ('years_experience', 'projects_completed', 'employees_count'),
             'description': 'Цифры, отображаемые на главной странице сайта'
         }),
     )

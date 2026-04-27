@@ -548,7 +548,7 @@ section {
     display: none;
 }
 
-/* Стили для поля "Свой вариант" с плавным появлением */
+/* Стили для поля своего варианта */
 #customTopicGroup {
     animation: slideDown 0.3s ease-out;
 }

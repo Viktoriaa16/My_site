@@ -9,7 +9,7 @@ class ContactInfo(models.Model):
     email = models.EmailField(verbose_name='Email (Ростов-на-Дону)')
     address = models.CharField(max_length=500, verbose_name='Адрес (Ростов-на-Дону)')
     
-    # Южно-Сахалинск (НОВЫЕ ПОЛЯ)
+    # Южно-Сахалинск
     sakhalin_phone = models.CharField(max_length=20, verbose_name='Телефон (Южно-Сахалинск)', blank=True, null=True)
     sakhalin_address = models.CharField(max_length=500, verbose_name='Адрес (Южно-Сахалинск)', blank=True, null=True)
     
@@ -29,10 +29,9 @@ class ContactInfo(models.Model):
 class SiteStatistics(models.Model):
     """Статистика компании на главной странице"""
     years_experience = models.PositiveIntegerField(default=29, verbose_name='Лет опыта')
-    projects_completed = models.PositiveIntegerField(default=1300, verbose_name='Реализованных проектов')
-    federal_projects = models.PositiveIntegerField(default=520, verbose_name='Проектов федерального масштаба')
+    projects_completed = models.PositiveIntegerField(default=1300, verbose_name='Проектов федерального масштаба')
     employees_count = models.PositiveIntegerField(default=120, verbose_name='Количество сотрудников')
-    regions_count = models.PositiveIntegerField(default=50, verbose_name='Регионов присутствия', blank=True, null=True)
+    
     
     class Meta:
         verbose_name = 'Статистика компании'

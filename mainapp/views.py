@@ -32,9 +32,7 @@ def index(request):
         stats = SiteStatistics.objects.create(
             years_experience=29,
             projects_completed=1300,
-            federal_projects=520,
             employees_count=120,
-            regions_count=50
         )
     
     if not about_info:
