@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mainapp',
+    'cookie_consent',
 ]
 
 MIDDLEWARE = [
@@ -159,3 +160,7 @@ ADMINS = [
 # Для mail_admins
 MANAGERS = ADMINS
 
+COOKIE_CONSENT_NAME = 'cookie_consent'
+COOKIE_CONSENT_MAX_AGE = 365 * 24 * 60 * 60
+COOKIE_CONSENT_LOG_ENABLED = False  
+COOKIE_CONSENT_OPT_OUT = False

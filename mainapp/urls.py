@@ -9,4 +9,5 @@ urlpatterns = [
     path('contacts/', views.contacts_page, name='contacts'),
     path('submit-request/', views.submit_request, name='submit_request'),
     path('privacy/', views.privacy_policy, name='privacy_policy'),
+    path('accept-cookies/', views.accept_cookies, name='accept_cookies'),
 ]

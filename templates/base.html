@@ -15,28 +15,21 @@
     <link rel="stylesheet" href="{% static 'mainapp/css/contacts.css' %}">
     <link rel="stylesheet" href="{% static 'mainapp/css/map.css' %}">
     <link rel="stylesheet" href="{% static 'mainapp/css/privacy.css' %}">
+    <link rel="stylesheet" href="{% static 'mainapp/css/cookie.css' %}">
     
-    <!-- Шрифты -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Фавикон -->
     <link rel="icon" href="{% static 'mainapp/images/logo.ico' %}">
-    
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Дополнительные стили -->
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <!-- Кнопка заявки -->
     <button class="btn-request" id="requestBtn" aria-label="Открыть форму заявки">
         <i class="fas fa-paper-plane" aria-hidden="true"></i> Оставить заявку
     </button>
 
-    <!-- Шапка сайта -->
     <header class="header">
         <div class="container">
             <div class="header-logo-container">
@@ -45,8 +38,6 @@
                     <a href="{% url 'index' %}" aria-label="На главную страницу">ДОНГИС</a>
                 </div>
             </div>
-            
-            <!-- Основная навигация -->
             <nav class="nav" aria-label="Главное меню">
                 <a href="{% url 'index' %}">Главная</a>
                 <a href="{% url 'index' %}#about">О компании</a>
@@ -55,14 +46,12 @@
                 <a href="{% url 'tech' %}">Техника</a>
                 <a href="{% url 'contacts' %}">Контакты</a>
             </nav>
-            
             <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Открыть мобильное меню">
                 <i class="fas fa-bars" aria-hidden="true"></i>
             </button>
         </div>
     </header>
 
-    <!-- Мобильное меню -->
     <nav class="mobile-menu" id="mobileMenu" aria-label="Мобильное меню">
         <ul>
             <li><a href="{% url 'index' %}">Главная</a></li>
@@ -74,122 +63,110 @@
         </ul>
     </nav>
 
-    <!-- Основной контент -->
     <main id="main-content">
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Футер -->
-<footer class="footer" id="contact">
-    <div class="container">
-        <div class="footer-content">
-            <div class="footer-logo">
-                <h3>ДОНГИС</h3>
-                <p>Ведущая инженерная компания России</p>
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>ДОНГИС</h3>
+                    <p>Ведущая инженерная компания России</p>
+                </div>
+                <div class="footer-nav">
+                    <h4>Навигация</h4>
+                    <ul class="footer-nav-list">
+                        <li><a href="{% url 'index' %}">Главная</a></li>
+                        <li><a href="{% url 'index' %}#about">О компании</a></li>
+                        <li><a href="{% url 'projects' %}">Проекты</a></li>
+                        <li><a href="{% url 'it' %}">IT</a></li>
+                        <li><a href="{% url 'tech' %}">Техника</a></li>
+                        <li><a href="{% url 'contacts' %}">Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contacts">
+                    <h4>Контакты</h4>
+                    <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> {{ contacts.address }}</p>
+                    <p><i class="fas fa-phone" aria-hidden="true"></i> {{ contacts.phone }}</p>
+                    <p><i class="fas fa-envelope" aria-hidden="true"></i> {{ contacts.email }}</p>
+                </div>
             </div>
-            
-            <div class="footer-nav">
-                <h4>Навигация</h4>
-                <ul class="footer-nav-list">
-                    <li><a href="{% url 'index' %}">Главная</a></li>
-                    <li><a href="{% url 'index' %}#about">О компании</a></li>
-                    <li><a href="{% url 'projects' %}">Проекты</a></li>
-                    <li><a href="{% url 'it' %}">IT</a></li>
-                    <li><a href="{% url 'tech' %}">Техника</a></li>
-                    <li><a href="{% url 'contacts' %}">Контакты</a></li>
-                </ul>
+            <div class="footer-copyright">
+                <p>&copy; <span id="currentYear"></span> ДОНГИС. Все права защищены.</p>
             </div>
-            
-            <div class="footer-contacts">
-    <h4>Контакты</h4>
-    <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> {{ contacts.address }}</p>
-    <p><i class="fas fa-phone" aria-hidden="true"></i> {{ contacts.phone }}</p>
-    <p><i class="fas fa-envelope" aria-hidden="true"></i> {{ contacts.email }}</p>
-    </div>
-    
-        <div class="footer-copyright">
-            <p>&copy; <span id="currentYear"></span> ДОНГИС. Все права защищены.</p>
         </div>
-    </div>
-</footer>
+    </footer>
 
     <!-- Модальное окно заявки -->
-<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal" id="requestModal">
-        <div class="modal-header">
-            <h3 id="modalTitle">Оставить заявку</h3>
-            <button class="modal-close" id="modalClose" aria-label="Закрыть окно">&times;</button>
-        </div>
-        <div class="modal-body">
-            <form id="requestForm" method="post" action="{% url 'submit_request' %}">
-                {% csrf_token %}
-                
-                <!-- Поле: Как к вам обращаться -->
-                <div class="form-group" id="nameGroup">
-                    <label for="name">Как к вам обращаться? <span class="required-star">*</span></label>
-                    <input type="text" id="name" name="name" placeholder="Иван Иванов" required>
-                    <div class="error-message" id="nameError" role="alert">Пожалуйста, введите ваше имя</div>
-                </div>
-                
-                <!-- Поле: Номер телефона -->
-                <div class="form-group" id="phoneGroup">
-                    <label for="phone">Номер телефона <span class="required-star">*</span></label>
-                    <input type="tel" id="phone" name="phone" placeholder="+7 (___) ___-__-__" required>
-                    <div class="error-message" id="phoneError" role="alert">Пожалуйста, введите корректный номер телефона</div>
-                </div>
-                
-                <!-- Поле: Тема обращения (выпадающий список) -->
-                <div class="form-group" id="topicGroup">
-                    <label for="topic">Тема обращения <span class="required-star">*</span></label>
-                    <select id="topic" name="topic" class="form-select" required>
-                        <option value="" disabled selected>Выберите тему обращения</option>
-                        <option value="Кадастровые работы">Кадастровые работы</option>
-                        <option value="Инженерные изыскания">Инженерные изыскания</option>
-                        <option value="Проектирование">Проектирование</option>
-                        <option value="Строительство">Строительство</option>
-                        <option value="Геотехнический мониторинг">Геотехнический мониторинг</option>
-                        <option value="Сотрудничество">Сотрудничество</option>
-                        <option value="other">Свой вариант</option>
-                    </select>
-                    <div class="error-message" id="topicError" role="alert">Пожалуйста, выберите тему обращения</div>
-                </div>
-                
-                <!-- Поле: Свой вариант (показывается при выборе "Свой вариант") -->
-                <div class="form-group" id="customTopicGroup" style="display: none;">
-                    <label for="custom_topic">Укажите ваш вариант <span class="required-star">*</span></label>
-                    <input type="text" id="custom_topic" name="custom_topic" placeholder="Например: Консультация, Обучение и т.д.">
-                    <div class="error-message" id="customTopicError" role="alert">Пожалуйста, укажите тему обращения</div>
-                </div>
-                
-                <!-- Поле: Текст сообщения -->
-                <div class="form-group" id="messageGroup">
-                    <label for="message">Текст сообщения <span class="required-star">*</span></label>
-                    <textarea id="message" name="message" rows="4" placeholder="Опишите подробнее ваш вопрос..." required></textarea>
-                    <div class="error-message" id="messageError" role="alert">Пожалуйста, введите текст сообщения (минимум 10 символов)</div>
-                </div>
-                
-                <!-- Чекбокс согласия -->
-                <div class="form-group consent-group" id="consentGroup">
-                    <label class="consent-label">
-                        <input type="checkbox" id="consent" name="consent" required>
-                        <span class="consent-text">
-                            Я даю согласие на обработку персональных данных
-                        </span>
-                    </label>
-                    <div class="error-message" id="consentError" role="alert">Необходимо дать согласие на обработку персональных данных</div>
-                    <div class="consent-link">
-                        <a href="{% url 'privacy_policy' %}" target="_blank">Политика обработки персональных данных</a>
+    <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal" id="requestModal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Оставить заявку</h3>
+                <button class="modal-close" id="modalClose" aria-label="Закрыть окно">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="requestForm" method="post" action="{% url 'submit_request' %}">
+                    {% csrf_token %}
+                    
+                    <div class="form-group" id="nameGroup">
+                        <label for="name">Как к вам обращаться? <span class="required-star">*</span></label>
+                        <input type="text" id="name" name="name" placeholder="Иван Иванов" required>
+                        <div class="error-message" id="nameError" role="alert">Пожалуйста, введите ваше имя</div>
                     </div>
-                </div>
-                
-                <div class="form-buttons">
-                    <button type="submit" class="btn-submit" id="submitBtn" disabled>Отправить заявку</button>
-                    <button type="button" class="btn-back" id="btnBack">Назад</button>
-                </div>
-            </form>
+                    
+                    <div class="form-group" id="phoneGroup">
+                        <label for="phone">Номер телефона <span class="required-star">*</span></label>
+                        <input type="tel" id="phone" name="phone" placeholder="+7 (___) ___-__-__" required>
+                        <div class="error-message" id="phoneError" role="alert">Пожалуйста, введите корректный номер телефона</div>
+                    </div>
+                    
+                    <div class="form-group" id="topicGroup">
+                        <label for="topic">Тема обращения <span class="required-star">*</span></label>
+                        <select id="topic" name="topic" class="form-select" required>
+                            <option value="" disabled selected>Выберите тему обращения</option>
+                            <option value="Кадастровые работы">Кадастровые работы</option>
+                            <option value="Инженерные изыскания">Инженерные изыскания</option>
+                            <option value="Проектирование">Проектирование</option>
+                            <option value="Строительство">Строительство</option>
+                            <option value="Геотехнический мониторинг">Геотехнический мониторинг</option>
+                            <option value="Сотрудничество">Сотрудничество</option>
+                            <option value="other">Свой вариант</option>
+                        </select>
+                        <div class="error-message" id="topicError" role="alert">Пожалуйста, выберите тему обращения</div>
+                    </div>
+                    
+                    <div class="form-group" id="customTopicGroup" style="display: none;">
+                        <label for="custom_topic">Укажите ваш вариант <span class="required-star">*</span></label>
+                        <input type="text" id="custom_topic" name="custom_topic" placeholder="Например: Консультация, Обучение и т.д.">
+                        <div class="error-message" id="customTopicError" role="alert">Пожалуйста, укажите тему обращения</div>
+                    </div>
+                    
+                    <div class="form-group" id="messageGroup">
+                        <label for="message">Текст сообщения <span class="required-star">*</span></label>
+                        <textarea id="message" name="message" rows="4" placeholder="Опишите подробнее ваш вопрос..." required></textarea>
+                        <div class="error-message" id="messageError" role="alert">Пожалуйста, введите текст сообщения (минимум 10 символов)</div>
+                    </div>
+                    
+                    <div class="form-group consent-group" id="consentGroup">
+                        <label class="consent-label">
+                            <input type="checkbox" id="consent" name="consent" required>
+                            <span class="consent-text">Я даю согласие на обработку персональных данных</span>
+                        </label>
+                        <div class="error-message" id="consentError" role="alert">Необходимо дать согласие на обработку персональных данных</div>
+                        <div class="consent-link">
+                            <a href="{% url 'privacy_policy' %}" target="_blank">Политика обработки персональных данных</a>
+                        </div>
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button type="submit" class="btn-submit" id="submitBtn" disabled>Отправить заявку</button>
+                        <button type="button" class="btn-back" id="btnBack">Назад</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
     <!-- JavaScript файлы -->
     <script src="{% static 'mainapp/js/main.js' %}"></script>
@@ -200,7 +177,27 @@
     <script src="{% static 'mainapp/js/contacts.js' %}"></script>
     <script src="{% static 'mainapp/js/map.js' %}"></script>
     
-    <!-- Дополнительные скрипты -->
     {% block extra_js %}{% endblock %}
+
+    <!-- ========== COOKIE CONSENT БАННЕР ========== -->
+        <!-- ========== COOKIE CONSENT БАННЕР ========== -->
+    <div id="cookie-banner" class="cookie-banner">
+        <div class="cookie-banner__content">
+            <span class="cookie-banner__text">🍪 Мы используем cookies для улучшения работы сайта. Продолжая использование, вы соглашаетесь с их обработкой.</span>
+            <form action="{% url 'accept_cookies' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <button type="submit" class="cookie-banner__btn">Принять</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Проверяем cookie при загрузке страницы
+        if (document.cookie.indexOf('cookie_consent=') !== -1) {
+            document.getElementById('cookie-banner').style.display = 'none';
+        }
+    </script>
+
 </body>
 </html>

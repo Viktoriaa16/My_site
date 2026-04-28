@@ -6,9 +6,17 @@ from django.conf import settings
 from django.utils import timezone
 from .models import ContactInfo, SiteStatistics, AboutInfo
 import re
+from django.shortcuts import redirect
 
-
-
+@csrf_exempt
+def accept_cookies(request):
+    """Принятие cookie - редирект обратно на страницу"""
+    if request.method == 'POST':
+        next_url = request.POST.get('next', '/')
+        response = redirect(next_url)
+        response.set_cookie('cookie_consent', 'accepted', max_age=365*24*60*60)
+        return response
+    return redirect('/')
 
 def index(request):
     """Главная страница"""
