@@ -55,7 +55,7 @@ function escapeHtml(str) {
     });
 }
 
-// Функция для создания модального окна
+// Функция для создания модального окна (для карточек проектов )
 function showModal(project) {
     const modal = document.createElement('div');
     modal.className = 'project-modal';

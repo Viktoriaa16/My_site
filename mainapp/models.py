@@ -4,12 +4,11 @@ from django.utils import timezone
 
 class ContactInfo(models.Model):
     """Контактная информация сайта"""
-    # Ростов-на-Дону
+    
     phone = models.CharField(max_length=20, verbose_name='Телефон (Ростов-на-Дону)')
     email = models.EmailField(verbose_name='Email (Ростов-на-Дону)')
     address = models.CharField(max_length=500, verbose_name='Адрес (Ростов-на-Дону)')
     
-    # Южно-Сахалинск
     sakhalin_phone = models.CharField(max_length=20, verbose_name='Телефон (Южно-Сахалинск)', blank=True, null=True)
     sakhalin_address = models.CharField(max_length=500, verbose_name='Адрес (Южно-Сахалинск)', blank=True, null=True)
     

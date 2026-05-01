@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 {% load static %}
+{% load analytical %}
 <html lang="ru">
 <head>
+     {% analytical_head_top %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}ДОНГИС | Ведущая инженерная компания России{% endblock %}</title>
     
-    <!-- CSS файлы -->
+    <!--  Подключаю CSS файлы -->
     <link rel="stylesheet" href="{% static 'mainapp/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'mainapp/css/slider.css' %}">
     <link rel="stylesheet" href="{% static 'mainapp/css/project.css' %}">
@@ -24,8 +26,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     {% block extra_css %}{% endblock %}
+    {% analytical_head_bottom %}
 </head>
 <body>
+    {% analytical_body_top %}
     <button class="btn-request" id="requestBtn" aria-label="Открыть форму заявки">
         <i class="fas fa-paper-plane" aria-hidden="true"></i> Оставить заявку
     </button>
@@ -98,7 +102,7 @@
         </div>
     </footer>
 
-    <!-- Модальное окно заявки -->
+    <!-- Модальное окно заявки с адресом на политику -->
     <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <div class="modal" id="requestModal">
             <div class="modal-header">
@@ -151,7 +155,7 @@
                     <div class="form-group consent-group" id="consentGroup">
                         <label class="consent-label">
                             <input type="checkbox" id="consent" name="consent" required>
-                            <span class="consent-text">Я даю согласие на обработку персональных данных</span>
+                            <span class="consent-text">Нажимая на кнопку «Оставить заявку»,  я даю согласие на обработку своих персональных данных и подтверждаю, что ознакомлен с политикой их обработки</span>
                         </label>
                         <div class="error-message" id="consentError" role="alert">Необходимо дать согласие на обработку персональных данных</div>
                         <div class="consent-link">
@@ -179,11 +183,11 @@
     
     {% block extra_js %}{% endblock %}
 
-    <!-- ========== COOKIE CONSENT БАННЕР ========== -->
-        <!-- ========== COOKIE CONSENT БАННЕР ========== -->
+    <!--  COOKIE CONSENT БАННЕР  -->
+        
     <div id="cookie-banner" class="cookie-banner">
         <div class="cookie-banner__content">
-            <span class="cookie-banner__text">🍪 Мы используем cookies для улучшения работы сайта. Продолжая использование, вы соглашаетесь с их обработкой.</span>
+            <span class="cookie-banner__text"> Мы используем cookies для улучшения работы сайта. Продолжая использование, вы соглашаетесь с их обработкой.</span>
             <form action="{% url 'accept_cookies' %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ request.path }}">
@@ -193,11 +197,11 @@
     </div>
 
     <script>
-        // Проверяем cookie при загрузке страницы
+        // Проверяю cookie при загрузке страницы
         if (document.cookie.indexOf('cookie_consent=') !== -1) {
             document.getElementById('cookie-banner').style.display = 'none';
         }
     </script>
-
+    {% analytical_body_bottom %}
 </body>
 </html>

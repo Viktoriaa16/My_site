@@ -79,7 +79,7 @@
     margin-right: auto;
 }
 
-/* Контейнер карты - фиксированный размер */
+/* Контейнер карты поставила  фиксированный размер */
 .map-container {
     position: relative;
     margin: 30px 0 50px;

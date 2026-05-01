@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
@@ -6,7 +6,58 @@ from django.conf import settings
 from django.utils import timezone
 from .models import ContactInfo, SiteStatistics, AboutInfo
 import re
-from django.shortcuts import redirect
+from zoneinfo import ZoneInfo
+
+
+#  ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ 
+
+def get_or_create_contacts():
+    """Получить или создать контактную информацию"""
+    contacts = ContactInfo.objects.first()
+    if not contacts:
+        contacts = ContactInfo.objects.create(
+            office_title='Офис в Ростове-на-Дону',
+            office_phone='+7 (988) 898-16-04',
+            office_email='info@don-gis.ru',
+            office_address='Россия, г. Ростов-на-Дону, пер. Братский 48/19, оф. 3,4.',
+            employment_title='По вопросам трудоустройства',
+            employment_person='Чертопалова Ольга Сергеевна',
+            employment_phone='+7 (863) 322-02-82 доб. 191<br>+7 (928) 127-14-83',
+            employment_email='o.chertopalova@don-gis.ru'
+        )
+    return contacts
+
+
+def get_or_create_stats():
+    """Получить или создать статистику компании"""
+    stats = SiteStatistics.objects.first()
+    if not stats:
+        stats = SiteStatistics.objects.create(
+            years_experience=29,
+            projects_completed=1300,
+            employees_count=120,
+        )
+    return stats
+
+
+def get_or_create_about():
+    """Получить или создать информацию о компании"""
+    about_info = AboutInfo.objects.first()
+    if not about_info:
+        about_info = AboutInfo.objects.create(
+            title='О компании',
+            text='<strong>ДОНГИС</strong> — одна из ведущих инженерных компаний, выполняющая работы по всей России и стран ближнего зарубежья. Разнообразие и широкая география проектов подтверждают уникальный опыт в каждой из экспертных областей и готовность решать поставленные задачи даже в непростых условиях.\n\nОсновными направлениями деятельности компании являются кадастровые и землеустроительные работы, полный комплекс инженерных изысканий, проектные и строительные работы. Гарантом профессионализма и надежности являются партнеры и постоянные клиенты на территории России и других стран.'
+        )
+    return about_info
+
+
+def validate_phone(phone):
+    """Проверка формата телефона"""
+    phone_regex = r'^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$'
+    return re.match(phone_regex, phone) is not None
+
+
+#  COOKIE 
 
 @csrf_exempt
 def accept_cookies(request):
@@ -18,74 +69,33 @@ def accept_cookies(request):
         return response
     return redirect('/')
 
+
+#  ОСНОВНЫЕ СТРАНИЦЫ 
 def index(request):
     """Главная страница"""
-    contacts = ContactInfo.objects.first()
-    stats = SiteStatistics.objects.first()
-    about_info = AboutInfo.objects.first()
-    
-    if not contacts:
-        contacts = ContactInfo.objects.create(
-            office_title='Офис в Ростове-на-Дону',
-            office_phone='+7 (988) 898-16-04',
-            office_email='info@don-gis.ru',
-            office_address='Россия, г. Ростов-на-Дону, пер. Братский 48/19, оф. 3,4.',
-            employment_title='По вопросам трудоустройства',
-            employment_person='Чертопалова Ольга Сергеевна',
-            employment_phone='+7 (863) 322-02-82 доб. 191<br>+7 (928) 127-14-83',
-            employment_email='o.chertopalova@don-gis.ru'
-        )
-    
-    if not stats:
-        stats = SiteStatistics.objects.create(
-            years_experience=29,
-            projects_completed=1300,
-            employees_count=120,
-        )
-    
-    if not about_info:
-        about_info = AboutInfo.objects.create(
-            title='О компании',
-            text='<strong>ДОНГИС</strong> — одна из ведущих инженерных компаний, выполняющая работы по всей России и стран ближнего зарубежья. Разнообразие и широкая география проектов подтверждают уникальный опыт в каждой из экспертных областей и готовность решать поставленные задачи даже в непростых условиях.\n\nОсновными направлениями деятельности компании являются кадастровые и землеустроительные работы, полный комплекс инженерных изысканий, проектные и строительные работы. Гарантом профессионализма и надежности являются партнеры и постоянные клиенты на территории России и других стран.'
-        )
-    
     context = {
         'title': 'ДОНГИС | Ведущая инженерная компания России',
         'page_title': 'ДОНГИС - Ведущая инженерная компания России',
-        'contacts': contacts,
-        'stats': stats,
-        'about_info': about_info,
+        'contacts': get_or_create_contacts(),
+        'stats': get_or_create_stats(),
+        'about_info': get_or_create_about(),
     }
     return render(request, 'mainapp/index.html', context)
 
 
 def services(request):
-    """Страница контактов"""
-    contacts = ContactInfo.objects.first()
-    
-    if not contacts:
-        contacts = ContactInfo.objects.create(
-            office_title='Офис в Ростове-на-Дону',
-            office_phone='+7 (988) 898-16-04',
-            office_email='info@don-gis.ru',
-            office_address='Россия, г. Ростов-на-Дону, пер. Братский 48/19, оф. 3,4.',
-            employment_title='По вопросам трудоустройства',
-            employment_person='Чертопалова Ольга Сергеевна',
-            employment_phone='+7 (863) 322-02-82 доб. 191<br>+7 (928) 127-14-83',
-            employment_email='o.chertopalova@don-gis.ru'
-        )
-    
+    """Страница услуг"""
     context = {
         'title': 'Услуги | ДОНГИС',
         'page_title': 'Наши услуги',
-        'contacts': contacts,
+        'contacts': get_or_create_contacts(),
     }
     return render(request, 'mainapp/services.html', context)
+
 
 def privacy_policy(request):
     """Страница политики конфиденциальности"""
     contacts = ContactInfo.objects.first()
-    
     if not contacts:
         contacts = ContactInfo.objects.create(
             phone='+7 (988) 898-16-04',
@@ -104,15 +114,14 @@ def privacy_policy(request):
 def projects(request):
     """Страница проектов"""
     contacts = ContactInfo.objects.first()
-    
     if not contacts:
         contacts = ContactInfo.objects.create(
-        phone='+7 (863) 322-02-82',
-        email='info@don-gis.ru',
-        address='Россия, г. Ростов-на-Дону, пер. Братский 48/19, оф. 3,4.',
-        sakhalin_phone='+7 (4242) 43-63-08',
-        sakhalin_address='г. Южно-Сахалинск, ул. Хабаровская, д.2'
-    )
+            phone='+7 (863) 322-02-82',
+            email='info@don-gis.ru',
+            address='Россия, г. Ростов-на-Дону, пер. Братский 48/19, оф. 3,4.',
+            sakhalin_phone='+7 (4242) 43-63-08',
+            sakhalin_address='г. Южно-Сахалинск, ул. Хабаровская, д.2'
+        )
     
     context = {
         'title': 'Проекты | ДОНГИС',
@@ -124,81 +133,35 @@ def projects(request):
 
 def it(request):
     """Страница IT технологий"""
-    contacts = ContactInfo.objects.first()
-    
-    if not contacts:
-        contacts = ContactInfo.objects.create(
-            office_title='Офис в Ростове-на-Дону',
-            office_phone='+7 (988) 898-16-04',
-            office_email='info@don-gis.ru',
-            office_address='Россия, г. Ростов-на-Дону, пер. Братский 48/19, оф. 3,4.',
-            employment_title='По вопросам трудоустройства',
-            employment_person='Чертопалова Ольга Сергеевна',
-            employment_phone='+7 (863) 322-02-82 доб. 191<br>+7 (928) 127-14-83',
-            employment_email='o.chertopalova@don-gis.ru'
-        )
-    
     context = {
         'title': 'IT технологии | ДОНГИС',
         'page_title': 'IT технологии',
-        'contacts': contacts,
+        'contacts': get_or_create_contacts(),
     }
     return render(request, 'mainapp/it.html', context)
 
 
 def tech(request):
     """Страница технического оснащения"""
-    contacts = ContactInfo.objects.first()
-    
-    if not contacts:
-        contacts = ContactInfo.objects.create(
-            office_title='Офис в Ростове-на-Дону',
-            office_phone='+7 (988) 898-16-04',
-            office_email='info@don-gis.ru',
-            office_address='Россия, г. Ростов-на-Дону, пер. Братский 48/19, оф. 3,4.',
-            employment_title='По вопросам трудоустройства',
-            employment_person='Чертопалова Ольга Сергеевна',
-            employment_phone='+7 (863) 322-02-82 доб. 191<br>+7 (928) 127-14-83',
-            employment_email='o.chertopalova@don-gis.ru'
-        )
-    
     context = {
         'title': 'Техническое оснащение | ДОНГИС',
         'page_title': 'Техническое оснащение',
-        'contacts': contacts,
+        'contacts': get_or_create_contacts(),
     }
     return render(request, 'mainapp/tech.html', context)
 
 
 def contacts_page(request):
     """Страница контактов"""
-    contacts = ContactInfo.objects.first()
-    
-    if not contacts:
-        contacts = ContactInfo.objects.create(
-            office_title='Офис в Ростове-на-Дону',
-            office_phone='+7 (988) 898-16-04',
-            office_email='info@don-gis.ru',
-            office_address='Россия, г. Ростов-на-Дону, пер. Братский 48/19, оф. 3,4.',
-            employment_title='По вопросам трудоустройства',
-            employment_person='Чертопалова Ольга Сергеевна',
-            employment_phone='+7 (863) 322-02-82 доб. 191<br>+7 (928) 127-14-83',
-            employment_email='o.chertopalova@don-gis.ru'
-        )
-    
     context = {
         'title': 'Контакты | ДОНГИС',
         'page_title': 'Контакты',
-        'contacts': contacts,
+        'contacts': get_or_create_contacts(),
     }
     return render(request, 'mainapp/contacts.html', context)
 
 
-def validate_phone(phone):
-    """Проверка формата телефона"""
-    phone_regex = r'^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$'
-    return re.match(phone_regex, phone) is not None
-
+#  ОБРАБОТКА ФОРМЫ ЗАЯВКИ 
 
 @csrf_exempt
 def submit_request(request):
@@ -254,7 +217,11 @@ def submit_request(request):
 
 def send_notification_email(name, phone, topic, message):
     """Отправка заявки на почту администраторам"""
-    email_subject = f'🆕 Новая заявка с сайта ДОНГИС: {topic[:50]}'
+    email_subject = f' Новая заявка с сайта ДОНГИС: {topic[:50]}'
+
+    # Московское время
+    moscow_time = timezone.now().astimezone(ZoneInfo('Europe/Moscow'))
+    formatted_time = moscow_time.strftime('%d.%m.%Y %H:%M')
     
     full_message = f"""
 Здравствуйте!
@@ -267,7 +234,7 @@ def send_notification_email(name, phone, topic, message):
 Телефон: {phone}
 Тема обращения: {topic}
 Сообщение: {message}
-Дата и время: {timezone.now().strftime('%d.%m.%Y %H:%M')}
+Дата и время: {formatted_time}
 
 ----------------
 С уважением,

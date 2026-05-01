@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-tlz4yj_^wi#&k1lpk!^9i51wvi-ot%&*=te0!h+g88y_d*9)d^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', '192.168.0.186', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['dongis.tech', '192.168.0.186', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -40,14 +40,24 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mainapp',
     'cookie_consent',
+    'analytical'
 ]
+
+
+YANDEX_METRICA_COUNTER_ID = '108990635'  
+
+
+YANDEX_METRICA_WEBVISOR = True  
+YANDEX_METRICA_CLICKMAP = True  
+YANDEX_METRICA_TRACK_LINKS = True  
+YANDEX_METRICA_ACCURATE_TRACK_BOUNCE = True  
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    # Нужно добавить следующую строку:
+    
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -152,9 +162,9 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
 
 # Администраторы, которые будут получать уведомления
-# ЗДЕСЬ УКАЖИТЕ ПОЧТУ, НА КОТОРУЮ ДОЛЖНЫ ПАДАТЬ ЗАЯВКИ
+
 ADMINS = [
-    ('Администратор', 'viktoria.polkina006@gmail.com'),  # <- СЮДА БУДУТ ПРИХОДИТЬ ЗАЯВКИ
+    ('Администратор', 'viktoria.polkina006@gmail.com'),  
 ]
 
 # Для mail_admins
@@ -164,3 +174,5 @@ COOKIE_CONSENT_NAME = 'cookie_consent'
 COOKIE_CONSENT_MAX_AGE = 365 * 24 * 60 * 60
 COOKIE_CONSENT_LOG_ENABLED = False  
 COOKIE_CONSENT_OPT_OUT = False
+
+EMAIL_USE_LOCALTIME = True

@@ -14,7 +14,7 @@
     padding: 2rem 1rem;
 }
 
-/* Карточка — 3 в ряд */
+/* Карточка 3 штукв в ряд */
 .project-card {
     background-color: #1a1a1a;
     border: 1px solid #2e7d32;
@@ -165,7 +165,7 @@
     overflow: hidden;
 }
 
-/* Герой-блок */
+/* Теекст-блок */
 .projects-hero {
     background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
     background-size: cover;
