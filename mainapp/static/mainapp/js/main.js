@@ -84,7 +84,7 @@ function initHeaderScroll() {
     });
 }
 
-// Установка текущего года
+// Текущий год
 function setCurrentYear() {
     const currentYear = new Date().getFullYear();
     const yearElements = document.querySelectorAll('#currentYear');
@@ -119,7 +119,7 @@ function validateConsent(consent) {
     return consent === true;
 }
 
-// Показывать ошибку только если поле было тронуто
+
 function showFieldError(fieldId, hasError, wasTouched) {
     const fieldGroup = document.getElementById(fieldId);
     if (fieldGroup && wasTouched) {
@@ -261,7 +261,7 @@ function initRequestForm() {
         if (e.target === modalOverlay) closeModal();
     });
     
-    // Показ/скрытие поля "Свой вариант"
+    // Показ и скрытие поля "Свой вариант"
     if (topicSelect) {
         topicSelect.addEventListener('change', function() {
             markFieldTouched('topic');
@@ -318,7 +318,7 @@ function initRequestForm() {
         });
     }
     
-    // Обработчики для всех полей ввода
+    // Обработчики для всех полей вводимых значений
     const nameInput = document.getElementById('name');
     const messageInput = document.getElementById('message');
     const consentCheckbox = document.getElementById('consent');
@@ -363,7 +363,7 @@ function initRequestForm() {
         });
     }
     
-    // Отправка формы
+    // Отправка формы связи
     if (requestForm) {
         requestForm.addEventListener('submit', async function(e) {
             e.preventDefault();

@@ -154,7 +154,7 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
 # Данные от почты, С КОТОРОЙ будут отправляться уведомления
-EMAIL_HOST_USER = 'don.gis.bot.tech@gmail.com'  # Например: don-gis@yandex.ru
+EMAIL_HOST_USER = 'don.gis.bot.tech@gmail.com'  
 EMAIL_HOST_PASSWORD = 'eitlmpxlrancuzjt'  # Пароль приложения!
 
 # Адресаты
@@ -164,7 +164,7 @@ SERVER_EMAIL = EMAIL_HOST_USER
 # Администраторы, которые будут получать уведомления
 
 ADMINS = [
-    ('Администратор', 'viktoria.polkina006@gmail.com'),  
+    ('Администратор', 'o.chertopalova@datumgroup.ru'),  
 ]
 
 # Для mail_admins

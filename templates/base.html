@@ -24,6 +24,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="{% static 'mainapp/images/logo.ico' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+     <!--  OPEN GRAPH МЕТА-ТЕГИ  -->
+    <meta property="og:title" content="{% block og_title %}ДОНГИС | Ведущая инженерная компания России{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Инженерная компания «ДОНГИС»: кадастровые работы, инженерные изыскания, проектирование и строительство по всей России.{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{% block og_image %}{% static 'mainapp/images/logo.ico' %}{% endblock %}">
     
     {% block extra_css %}{% endblock %}
     {% analytical_head_bottom %}
@@ -178,7 +185,6 @@
     <script src="{% static 'mainapp/js/project.js' %}"></script>
     <script src="{% static 'mainapp/js/it.js' %}"></script>
     <script src="{% static 'mainapp/js/tech.js' %}"></script>
-    <script src="{% static 'mainapp/js/contacts.js' %}"></script>
     <script src="{% static 'mainapp/js/map.js' %}"></script>
     
     {% block extra_js %}{% endblock %}

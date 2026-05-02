@@ -17,8 +17,8 @@ def get_or_create_contacts():
     if not contacts:
         contacts = ContactInfo.objects.create(
             office_title='Офис в Ростове-на-Дону',
-            office_phone='+7 (988) 898-16-04',
-            office_email='info@don-gis.ru',
+            office_phone='+7 (863) 322-02-82',
+            office_email='ofman@don-gis.ru',
             office_address='Россия, г. Ростов-на-Дону, пер. Братский 48/19, оф. 3,4.',
             employment_title='По вопросам трудоустройства',
             employment_person='Чертопалова Ольга Сергеевна',
@@ -98,8 +98,8 @@ def privacy_policy(request):
     contacts = ContactInfo.objects.first()
     if not contacts:
         contacts = ContactInfo.objects.create(
-            phone='+7 (988) 898-16-04',
-            email='info@don-gis.ru',
+            phone='+7 (863) 322-02-82',
+            email='ofman@don-gis.ru',
             address='Россия, г. Ростов-на-Дону, пер. Братский 48/19, оф. 3,4.'
         )
     
@@ -117,7 +117,7 @@ def projects(request):
     if not contacts:
         contacts = ContactInfo.objects.create(
             phone='+7 (863) 322-02-82',
-            email='info@don-gis.ru',
+            email='ofman@don-gis.ru',
             address='Россия, г. Ростов-на-Дону, пер. Братский 48/19, оф. 3,4.',
             sakhalin_phone='+7 (4242) 43-63-08',
             sakhalin_address='г. Южно-Сахалинск, ул. Хабаровская, д.2'
