@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-tlz4yj_^wi#&k1lpk!^9i51wvi-ot%&*=te0!h+g88y_d*9)d^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['dongis.tech', '192.168.0.186', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['dongis.tech', 'www.dongis.tech', '192.168.0.186', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -126,8 +126,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = 'ru-ru'  # меняем на русский
-TIME_ZONE = 'Europe/Moscow'  # меняем на свой часовой пояс
+LANGUAGE_CODE = 'ru-ru'  
+TIME_ZONE = 'Europe/Moscow'  
 USE_I18N = True
 USE_TZ = True
 

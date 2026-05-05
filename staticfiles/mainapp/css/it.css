@@ -1,0 +1,110 @@
+.it-hero {
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    text-align: center;
+    padding: 100px 20px 60px;
+    margin-top: 70px;
+}
+
+.it-hero h1 {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.it-hero p {
+    font-size: 18px;
+    max-width: 800px;
+    margin: 0 auto;
+    opacity: 0.9;
+}
+
+.it-menu {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 40px 20px;
+    background: #f9f9f9;
+    flex-wrap: wrap;
+}
+
+.it-btn {
+    padding: 14px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #333;
+}
+
+.it-btn:hover {
+    border-color: #1b552d;
+    transform: translateY(-2px);
+}
+
+.it-btn.active {
+    background: #1b552d;
+    border-color: #1b552d;
+    color: white;
+}
+
+.it-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    padding: 50px;
+    margin-bottom: 60px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.it-content h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1b552d;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #1b552d;
+    display: inline-block;
+}
+
+.it-content p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.it-content ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 20px;
+}
+
+.it-content li {
+    padding: 8px 0;
+    padding-left: 24px;
+    position: relative;
+    font-size: 16px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.it-content li:before {
+    content: "▹";
+    position: absolute;
+    left: 0;
+    color: #1b552d;
+}
+
+@media (max-width: 768px) {
+    .it-hero h1 { font-size: 32px; }
+    .it-btn { padding: 10px 20px; font-size: 14px; }
+    .it-content { padding: 25px; margin: 0 15px 40px; }
+    .it-content h2 { font-size: 24px; }
+}

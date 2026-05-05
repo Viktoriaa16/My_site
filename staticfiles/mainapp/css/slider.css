@@ -1,0 +1,236 @@
+/* Центральный слайдер */
+.main-slider {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 600px;
+    overflow: hidden;
+    margin-top: 70px;
+}
+
+.main-slider-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: background-image 0.5s ease-in-out;
+}
+
+.main-slider-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.main-slider-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 20px;
+}
+
+/* Заблюрила квадрат по центру чтобы создать эффект зеркала */
+.slider-card {
+    max-width: 700px;
+    width: 90%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 24px;
+    padding: 40px;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: fadeInUp 0.5s ease-out;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* для слайдов с услугами) */
+.slider-card h2 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #fff;
+    border-left: 4px solid #134b2e;
+    padding-left: 15px;
+    text-align: left;
+}
+
+.slider-card p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    opacity: 0.9;
+    text-align: left;
+    font-weight: 500;
+}
+
+/* Для первого слайда (ДОНГИС) */
+.slider-card.align-center h2 {
+    text-align: center;
+    border-left: none;
+    padding-left: 0;
+}
+
+.slider-card.align-center p {
+    text-align: center;
+}
+
+.slider-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.slider-card li {
+    padding: 8px 0;
+    padding-left: 20px;
+    position: relative;
+    font-size: 15px;
+    opacity: 0.9;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.slider-card li:last-child {
+    border-bottom: none;
+}
+
+.slider-card li:before {
+    content: "▹";
+    position: absolute;
+    left: 0;
+    color: #134b2e;
+}
+
+/* Стрелки навигации */
+.slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+}
+
+.slider-arrow:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.slider-arrow.prev {
+    left: 30px;
+}
+
+.slider-arrow.next {
+    right: 30px;
+}
+
+/* Точки навигации */
+.slider-dots {
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    z-index: 10;
+}
+
+.slider-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.slider-dot:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: scale(1.2);
+}
+
+.slider-dot.active {
+    width: 30px;
+    border-radius: 5px;
+    background: #095131;
+}
+
+/* Анимация */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .slider-card {
+        padding: 25px;
+    }
+    
+    .slider-card h2 {
+        font-size: 24px;
+    }
+    
+    .slider-card p {
+        font-size: 16px;
+    }
+    
+    .slider-card li {
+        font-size: 13px;
+        padding: 6px 0 6px 18px;
+    }
+    
+    .slider-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+    
+    .slider-arrow.prev {
+        left: 15px;
+    }
+    
+    .slider-arrow.next {
+        right: 15px;
+    }
+    
+    .slider-dots {
+        bottom: 20px;
+        gap: 8px;
+    }
+    
+    .slider-dot {
+        width: 8px;
+        height: 8px;
+    }
+    
+    .slider-dot.active {
+        width: 25px;
+    }
+}
